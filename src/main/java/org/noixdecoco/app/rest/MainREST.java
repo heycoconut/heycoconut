@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.alec.app.data.model.Person;
-import com.alec.app.data.repository.PersonRepository;
+import org.noixdecoco.app.data.model.Person;
+import org.noixdecoco.app.data.repository.PersonRepository;
 
 import reactor.core.publisher.Flux;
 
