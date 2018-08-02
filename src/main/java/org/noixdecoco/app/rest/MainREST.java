@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import org.noixdecoco.app.data.model.Person;
 import org.noixdecoco.app.data.repository.PersonRepository;
-import org.noixdecoco.app.dto.EventDTO;
+import org.noixdecoco.app.dto.SlackRequestDTO;
 
 import reactor.core.publisher.Flux;
 
@@ -50,8 +50,17 @@ public class MainREST {
 	}
 	
 	@PostMapping("/event")
-	public Flux<EventDTO> challenge(@RequestBody EventDTO event) {
-		LOGGER.info("Getting challenged:" + event.getChallenge());
+	public Flux<SlackRequestDTO> challenge(@RequestBody SlackRequestDTO event) {
+		if(event.getChallenge() != null) {
+			LOGGER.info("Getting challenged:" + event.getChallenge());
+		} else if(event.getEvent() != null) {
+			LOGGER.info(event.getEvent().toString());
+			if(event.getEvent().getText().contains(":coconut:")) {
+				// Did someone give a coconut??? :O
+				LOGGER.info("COCONUT TIME!!!!" + event.getEvent().getUser() + " just gave a coconut!");
+			}
+		}
+		
 		return Flux.just(event);
 	}
 
