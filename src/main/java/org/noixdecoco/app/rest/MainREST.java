@@ -47,6 +47,7 @@ public class MainREST {
 
 	}
 	
+	@PostMapping("/event")
 	public Flux<Void> challenge(@RequestParam(name="challenge")String challenge) {
 		LOGGER.info("Getting challenged:" + challenge);
 		return Flux.empty();
