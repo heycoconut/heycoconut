@@ -46,5 +46,10 @@ public class MainREST {
 		}
 
 	}
+	
+	public Flux<Void> challenge(@RequestParam(name="challenge")String challenge) {
+		LOGGER.info("Getting challenged:" + challenge);
+		return Flux.empty();
+	}
 
 }
