@@ -75,7 +75,7 @@ public class EventDTO {
 		return "EventDTO:\n" +
 				"type: " + type +
 				"\nchannel: " + channel +
-				"\nuser: " + "user" +
+				"\nuser: " + user +
 				"\nts: " + ts +
 				"\nevent_ts: " + event_ts +
 				"\nchannel_type: " + channel;
