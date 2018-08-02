@@ -5,12 +5,14 @@ import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import org.noixdecoco.app.data.model.Person;
 import org.noixdecoco.app.data.repository.PersonRepository;
+import org.noixdecoco.app.dto.EventDTO;
 
 import reactor.core.publisher.Flux;
 
@@ -48,9 +50,9 @@ public class MainREST {
 	}
 	
 	@PostMapping("/event")
-	public Flux<Void> challenge(@RequestParam(name="challenge")String challenge) {
-		LOGGER.info("Getting challenged:" + challenge);
-		return Flux.empty();
+	public Flux<EventDTO> challenge(@RequestBody EventDTO event) {
+		LOGGER.info("Getting challenged:" + event.getChallenge());
+		return Flux.just(event);
 	}
 
 }
