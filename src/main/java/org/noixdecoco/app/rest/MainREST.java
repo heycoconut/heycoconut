@@ -3,13 +3,16 @@ package org.noixdecoco.app.rest;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
+import org.springframework.web.client.RestTemplate;
 import org.noixdecoco.app.data.model.Person;
 import org.noixdecoco.app.data.repository.PersonRepository;
 import org.noixdecoco.app.dto.SlackRequestDTO;
@@ -23,6 +26,9 @@ public class MainREST {
 
 	@Autowired
 	private PersonRepository personRepository;
+	
+	@Value("bot.token")
+	private String botToken;
 
 	@RequestMapping("/health")
 	public String health() {
@@ -58,6 +64,11 @@ public class MainREST {
 			if(event.getEvent().getText().contains(":coconut:")) {
 				// Did someone give a coconut??? :O
 				LOGGER.info("COCONUT TIME!!!!" + event.getEvent().getUser() + " just gave a coconut!");
+				HttpHeaders headers = new HttpHeaders();
+				headers.set("Content-Type", "application/json"); 
+				HttpEntity<String> request = new HttpEntity<>("{'token':"+botToken+", 'channel':"+event.getEvent().getChannel()+", 'message':'DID SOMEONE SAY COCONUT!?!?!' }", headers);
+				
+				new RestTemplate().postForObject("https://slack.com/api/chat.meMessage", request, Void.class);
 			}
 		}
 		
