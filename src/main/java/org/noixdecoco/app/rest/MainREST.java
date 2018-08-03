@@ -29,6 +29,9 @@ public class MainREST {
 	
 	@Value("bot.token")
 	private String botToken;
+	
+	@Value("bot.auth.token")
+	private String authToken;
 
 	@RequestMapping("/health")
 	public String health() {
@@ -66,7 +69,8 @@ public class MainREST {
 				LOGGER.info("COCONUT TIME!!!!" + event.getEvent().getUser() + " just gave a coconut!");
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "application/json"); 
-				HttpEntity<String> request = new HttpEntity<>("{'token':"+botToken+", 'channel':"+event.getEvent().getChannel()+", 'message':'DID SOMEONE SAY COCONUT!?!?!' }", headers);
+				headers.set("Authorization", "Bearer " + authToken); 
+				HttpEntity<String> request = new HttpEntity<>("{'token': '"+botToken+"', 'channel':'"+event.getEvent().getChannel()+"', 'message':'DID SOMEONE SAY COCONUT!?!?!' }", headers);
 				
 				new RestTemplate().postForObject("https://slack.com/api/chat.meMessage", request, Void.class);
 			}
