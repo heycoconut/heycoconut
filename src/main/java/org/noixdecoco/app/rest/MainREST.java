@@ -78,15 +78,15 @@ public class MainREST {
 					//Text contains a mention of someone or multiple people
 					String[] allMentions = text.split("@");
 					List<String> names = new ArrayList<>();
-					for(String singleMention : allMentions) {
-						names.add(singleMention.substring(0, singleMention.indexOf(' ')));
+					for(int i=1; i<allMentions.length;i++) { // Skip first element in array which doesnt start with @
+						names.add(allMentions[i].substring(0, allMentions[i].indexOf(' ')));
 					}
 					if(names.size() > 0) {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> just give coconuts to ";
 						for(String name : names) {
 							data += "<@" + name + "> ";
 						}
-						data += "?";
+						data += "? \"}";
 						LOGGER.info("AuthToken:" + authToken);
 						LOGGER.info("Data:" + data);
 						HttpEntity<String> request = new HttpEntity<>(data, headers);
