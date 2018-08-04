@@ -64,7 +64,7 @@ public class MainREST {
 			LOGGER.info("Getting challenged:" + event.getChallenge());
 		} else if(event.getEvent() != null) {
 			LOGGER.info(event.getEvent().toString());
-			if(event.getEvent().getText().contains(":coconut:")) {
+			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:")) {
 				// Did someone give a coconut??? :O
 				LOGGER.info("COCONUT TIME!!!!" + event.getEvent().getUser() + " just gave a coconut!");
 				HttpHeaders headers = new HttpHeaders();
