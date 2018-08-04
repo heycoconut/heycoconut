@@ -1,5 +1,8 @@
 package org.noixdecoco.app.rest;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,14 +73,31 @@ public class MainREST {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "application/json"); 
 				headers.set("Authorization", "Bearer " + authToken); 
-				String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> SAY COCONUT!?\" }";
-				LOGGER.info("AuthToken:" + authToken);
-				LOGGER.info("Data:" + data);
-				HttpEntity<String> request = new HttpEntity<>(data, headers);
+				String text = event.getEvent().getText();
+				if(text.contains("@")) {
+					//Text contains a mention of someone or multiple people
+					String[] allMentions = text.split("@");
+					List<String> names = new ArrayList<>();
+					for(String singleMention : allMentions) {
+						names.add(singleMention.substring(0, singleMention.indexOf(' ')));
+					}
+					if(names.size() > 0) {
+						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> just give coconuts to ";
+						for(String name : names) {
+							data += "<@" + name + "> ";
+						}
+						data += "?";
+						LOGGER.info("AuthToken:" + authToken);
+						LOGGER.info("Data:" + data);
+						HttpEntity<String> request = new HttpEntity<>(data, headers);
+						
+						String response = new RestTemplate().postForObject("https://slack.com/api/chat.meMessage", request, String.class);
+						
+						LOGGER.info("response: " + response);
+					}
+					
+				}
 				
-				String response = new RestTemplate().postForObject("https://slack.com/api/chat.meMessage", request, String.class);
-				
-				LOGGER.info("response: " + response);
 			}
 		}
 		
