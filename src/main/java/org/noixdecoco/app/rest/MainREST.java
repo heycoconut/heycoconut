@@ -70,7 +70,7 @@ public class MainREST {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "application/json"); 
 				headers.set("Authorization", "Bearer " + authToken); 
-				String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> SAY COCONUT!? :coconut:\" }";
+				String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> SAY COCONUT!?\" }";
 				LOGGER.info("AuthToken:" + authToken);
 				LOGGER.info("Data:" + data);
 				HttpEntity<String> request = new HttpEntity<>(data, headers);
