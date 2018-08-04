@@ -77,6 +77,7 @@ public class EventDTO {
 				"\nchannel: " + channel +
 				"\nuser: " + user +
 				"\nts: " + ts +
+				"\ntext:" + text +
 				"\nevent_ts: " + event_ts +
 				"\nchannel_type: " + channel;
 	}
