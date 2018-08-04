@@ -70,7 +70,10 @@ public class MainREST {
 				HttpHeaders headers = new HttpHeaders();
 				headers.set("Content-Type", "application/json"); 
 				headers.set("Authorization", "Bearer " + authToken); 
-				HttpEntity<String> request = new HttpEntity<>("{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID SOMEONE SAY COCONUT!? :coconut:\" }", headers);
+				String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID SOMEONE SAY COCONUT!? :coconut:\" }";
+				LOGGER.info("AuthToken:" + authToken);
+				LOGGER.info("Data:" + data);
+				HttpEntity<String> request = new HttpEntity<>(data, headers);
 				
 				String response = new RestTemplate().postForObject("https://slack.com/api/chat.meMessage", request, String.class);
 				
