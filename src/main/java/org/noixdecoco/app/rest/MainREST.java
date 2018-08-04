@@ -84,7 +84,7 @@ public class MainREST {
 					if(names.size() > 0) {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> just give coconuts to ";
 						for(String name : names) {
-							data += "<@" + name + "> ";
+							data += "<@" + name + " ";
 						}
 						data += "? \"}";
 						LOGGER.info("AuthToken:" + authToken);
