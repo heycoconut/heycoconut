@@ -27,10 +27,10 @@ public class MainREST {
 	@Autowired
 	private PersonRepository personRepository;
 	
-	@Value("bot.token")
+	@Value("#{ systemProperties['bot.key']")
 	private String botToken;
 	
-	@Value("bot.auth.token")
+	@Value("#{ systemProperties['bot.auth.token']")
 	private String authToken;
 
 	@RequestMapping("/health")
