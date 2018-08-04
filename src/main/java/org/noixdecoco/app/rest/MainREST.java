@@ -7,6 +7,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Example;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,8 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-import org.noixdecoco.app.data.model.Person;
-import org.noixdecoco.app.data.repository.PersonRepository;
+import org.noixdecoco.app.data.model.CoconutLedger;
+import org.noixdecoco.app.data.repository.CoconutLedgerRepository;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 
 import reactor.core.publisher.Flux;
@@ -28,7 +29,7 @@ public class MainREST {
 	private static final Logger LOGGER = LogManager.getLogger(MainREST.class);
 
 	@Autowired
-	private PersonRepository personRepository;
+	private CoconutLedgerRepository coconutRepo;
 	
 	@Value("${bot.key}")
 	private String botToken;
@@ -42,21 +43,21 @@ public class MainREST {
 		return "I'm alright, how about you?";
 	}
 
-	@PostMapping("/person")
+	//@PostMapping("/coconuts")
 	public void insertPerson(@RequestParam("id") Long id) {
-		Person p = new Person();
+		CoconutLedger p = new CoconutLedger();
 		p.setId(id);
-		personRepository.insert(p);
+		coconutRepo.insert(p);
 		LOGGER.info("Inserted person:" + id);
 	}
 
-	@GetMapping("/person")
-	public Flux<Person> getPerson(@RequestParam(name = "id", required = false) Long id) {
+	@GetMapping("/coconut")
+	public Flux<CoconutLedger> getPerson(@RequestParam(name = "id", required = false) Long id) {
 		LOGGER.info("Getting person:" + id);
 		if (id != null) {
-			return personRepository.findById(id).flux();
+			return coconutRepo.findById(id).flux();
 		} else {
-			return personRepository.findAll();
+			return coconutRepo.findAll();
 		}
 
 	}
@@ -67,7 +68,7 @@ public class MainREST {
 			LOGGER.info("Getting challenged:" + event.getChallenge());
 		} else if(event.getEvent() != null) {
 			LOGGER.info(event.getEvent().toString());
-			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:")) {
+			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && "channel".equals(event.getEvent().getChannel_type())) {
 				// Did someone give a coconut??? :O
 				LOGGER.info("COCONUT TIME!!!!" + event.getEvent().getUser() + " just gave a coconut!");
 				HttpHeaders headers = new HttpHeaders();
@@ -79,15 +80,22 @@ public class MainREST {
 					String[] allMentions = text.split("@");
 					List<String> names = new ArrayList<>();
 					for(int i=1; i<allMentions.length;i++) { // Skip first element in array which doesnt start with @
-						names.add(allMentions[i].substring(0, allMentions[i].indexOf(' ')));
+						names.add(allMentions[i].substring(0, allMentions[i].indexOf(' ')-1));
 					}
 					if(names.size() > 0) {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> just give coconuts to ";
 						for(String name : names) {
-							data += "<@" + name + " ";
+							data += "<@" + name + "> ";
+							coconutRepo.findOne(Example.of(new CoconutLedger(name))).subscribe(
+									value -> value.setNumberOfCoconuts(value.getNumberOfCoconuts()+1),
+									error -> LOGGER.error(error),
+									() -> {
+										CoconutLedger ledger = new CoconutLedger(name);
+										ledger.setNumberOfCoconuts(1);
+										coconutRepo.insert(ledger); 
+									});
 						}
 						data += "? \"}";
-						LOGGER.info("AuthToken:" + authToken);
 						LOGGER.info("Data:" + data);
 						HttpEntity<String> request = new HttpEntity<>(data, headers);
 						

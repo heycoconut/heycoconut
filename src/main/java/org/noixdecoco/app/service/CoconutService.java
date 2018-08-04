@@ -1,6 +1,6 @@
 package org.noixdecoco.app.service;
 
-public class SlackService {
+public class CoconutService {
 
 	
 }
