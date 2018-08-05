@@ -1,12 +1,9 @@
 package org.noixdecoco.app.data.model;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "coconutledgers")
 public class CoconutLedger {
-	@Id
-	private long id;
 	
 	private String username; // Owner of this ledger
 	
@@ -20,15 +17,6 @@ public class CoconutLedger {
 		this.username = username;
 	}
 	
-
-	public long getId() {
-		return id;
-	}
-
-	public void setId(long id) {
-		this.id = id;
-	}
-
 	public String getUsername() {
 		return username;
 	}

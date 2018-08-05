@@ -46,7 +46,6 @@ public class MainREST {
 	//@PostMapping("/coconuts")
 	public void insertPerson(@RequestParam("id") Long id) {
 		CoconutLedger p = new CoconutLedger();
-		p.setId(id);
 		coconutRepo.insert(p);
 		LOGGER.info("Inserted person:" + id);
 	}
@@ -95,7 +94,7 @@ public class MainREST {
 										coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
 									});
 						}
-						data += "? \"}";
+						data += " \"}";
 						LOGGER.info("Data:" + data);
 						HttpEntity<String> request = new HttpEntity<>(data, headers);
 						
