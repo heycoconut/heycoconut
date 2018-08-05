@@ -85,19 +85,19 @@ public class MainREST {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
 						for(String name : names) {
 							data += "<@" + name + "> ";
-							coconutRepo.findByUsername(name).subscribe(
-									ledger -> {
-										ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
-										LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
-										coconutRepo.save(ledger).subscribe();
-										
-									},
-									error -> LOGGER.error(error),
-									() -> {
-										CoconutLedger ledger = new CoconutLedger(name);
-										ledger.setNumberOfCoconuts(Long.valueOf(1));
-										coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
-									});
+							
+							List<CoconutLedger> ledgers = coconutRepo.findByUsername(name).collectList().block();
+							if(ledgers.isEmpty()) {
+								CoconutLedger ledger = new CoconutLedger(name);
+								ledger.setNumberOfCoconuts(Long.valueOf(1));
+								coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
+							} else {
+								CoconutLedger ledger = ledgers.get(0);
+								ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
+								LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
+								coconutRepo.save(ledger).subscribe();
+							}
+							
 						}
 						data += " \"}";
 						LOGGER.info("Data:" + data);
