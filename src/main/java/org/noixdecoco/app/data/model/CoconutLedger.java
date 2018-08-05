@@ -1,10 +1,12 @@
 package org.noixdecoco.app.data.model;
 
+import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document(collection = "coconutledgers")
 public class CoconutLedger {
 	
+	@Id
 	private String username; // Owner of this ledger
 	
 	private Long numberOfCoconuts; // Number of coconuts received total
