@@ -90,7 +90,7 @@ public class MainREST {
 									error -> LOGGER.error(error),
 									() -> {
 										CoconutLedger ledger = new CoconutLedger(name);
-										ledger.setNumberOfCoconuts(1);
+										ledger.setNumberOfCoconuts(Long.valueOf(1));
 										coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
 									});
 						}

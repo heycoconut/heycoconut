@@ -7,7 +7,7 @@ public class CoconutLedger {
 	
 	private String username; // Owner of this ledger
 	
-	private long numberOfCoconuts; // Number of coconuts received total
+	private Long numberOfCoconuts; // Number of coconuts received total
 	
 	public CoconutLedger() {
 		
@@ -25,11 +25,11 @@ public class CoconutLedger {
 		this.username = username;
 	}
 
-	public long getNumberOfCoconuts() {
+	public Long getNumberOfCoconuts() {
 		return numberOfCoconuts;
 	}
 
-	public void setNumberOfCoconuts(long numberOfCoconuts) {
+	public void setNumberOfCoconuts(Long numberOfCoconuts) {
 		this.numberOfCoconuts = numberOfCoconuts;
 	}
 	
