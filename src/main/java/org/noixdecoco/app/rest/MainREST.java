@@ -74,12 +74,12 @@ public class MainREST {
 				headers.set("Content-Type", "application/json"); 
 				headers.set("Authorization", "Bearer " + authToken); 
 				String text = event.getEvent().getText();
-				if(text.contains("@")) {
+				if(text.contains("<@")) {
 					//Text contains a mention of someone or multiple people
-					String[] allMentions = text.split("@");
+					String[] allMentions = text.split("<@");
 					List<String> names = new ArrayList<>();
 					for(int i=1; i<allMentions.length;i++) { // Skip first element in array which doesnt start with @
-						names.add(allMentions[i].substring(0, allMentions[i].indexOf(' ')-1));
+						names.add(allMentions[i].substring(0, allMentions[i].indexOf('>')));
 					}
 					if(names.size() > 0) {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
