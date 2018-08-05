@@ -86,7 +86,12 @@ public class MainREST {
 						for(String name : names) {
 							data += "<@" + name + "> ";
 							coconutRepo.findOne(Example.of(new CoconutLedger(name))).subscribe(
-									value -> value.setNumberOfCoconuts(value.getNumberOfCoconuts()+1),
+									ledger -> {
+										ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
+										LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
+										coconutRepo.save(ledger);
+										
+									},
 									error -> LOGGER.error(error),
 									() -> {
 										CoconutLedger ledger = new CoconutLedger(name);
