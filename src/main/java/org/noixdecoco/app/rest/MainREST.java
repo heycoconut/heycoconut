@@ -89,7 +89,7 @@ public class MainREST {
 									ledger -> {
 										ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
 										LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
-										coconutRepo.save(ledger);
+										coconutRepo.save(ledger).subscribe();
 										
 									},
 									error -> LOGGER.error(error),
