@@ -68,7 +68,7 @@ public class MainREST {
 			LOGGER.info("Getting challenged:" + event.getChallenge());
 		} else if(event.getEvent() != null) {
 			LOGGER.info(event.getEvent().toString());
-			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && ("channel".equals(event.getEvent().getChannel_type()))) {
+			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && ("channel".equals(event.getEvent().getChannel_type()) || "group".equals(event.getEvent().getChannel_type()))) {
 				// Did someone give a coconut??? :O
 				LOGGER.info(event.getEvent().getUser() + " just gave a coconut!");
 				HttpHeaders headers = new HttpHeaders();
@@ -83,7 +83,7 @@ public class MainREST {
 						names.add(allMentions[i].substring(0, allMentions[i].indexOf(' ')-1));
 					}
 					if(names.size() > 0) {
-						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"DID <@"+event.getEvent().getUser()  + "> just give coconuts to ";
+						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
 						for(String name : names) {
 							data += "<@" + name + "> ";
 							coconutRepo.findOne(Example.of(new CoconutLedger(name))).subscribe(
