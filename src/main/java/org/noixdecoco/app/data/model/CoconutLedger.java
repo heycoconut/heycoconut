@@ -44,5 +44,9 @@ public class CoconutLedger {
 	public void setNumberOfCoconuts(long numberOfCoconuts) {
 		this.numberOfCoconuts = numberOfCoconuts;
 	}
+	
+	public String toString() {
+		return "CoconutLedger: [username=" + username + ", coconuts=" + numberOfCoconuts + "]";
+	}
 
 }
