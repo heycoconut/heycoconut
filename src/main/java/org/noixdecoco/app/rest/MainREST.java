@@ -85,7 +85,7 @@ public class MainREST {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
 						for(String name : names) {
 							data += "<@" + name + "> ";
-							coconutRepo.findOne(Example.of(new CoconutLedger(name))).subscribe(
+							coconutRepo.findByUsername(name).subscribe(
 									ledger -> {
 										ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
 										LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
