@@ -18,7 +18,7 @@ public class CoconutLedger {
 	
 	private Long coconutsGiven;
 	
-	private Date lastCoconutGiveAt;
+	private Date lastCoconutGivenAt;
 	
 	public CoconutLedger() {
 		
@@ -60,17 +60,20 @@ public class CoconutLedger {
 		this.coconutsGiven = coconutsGiven;
 	}
 
-	public Date getLastCoconutGiveAt() {
-		return lastCoconutGiveAt;
+	public Date getLastCoconutGivenAt() {
+		return lastCoconutGivenAt;
 	}
 
-	public void setLastCoconutGiveAt(Date lastCoconutGiveAt) {
-		this.lastCoconutGiveAt = lastCoconutGiveAt;
+	public void setLastCoconutGivenAt(Date lastCoconutGivenAt) {
+		this.lastCoconutGivenAt = lastCoconutGivenAt;
 	}
 
 	public static CoconutLedger createNew() {
 		CoconutLedger ledger = new CoconutLedger();
 		ledger.setId(new ObjectId());
+		ledger.setCoconutsGiven(0l);
+		ledger.setNumberOfCoconuts(0l);
+		
 		return ledger;
 	}
 

@@ -9,6 +9,7 @@ import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.dto.MeMessageDTO;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.noixdecoco.app.exception.CoconutException;
+import org.noixdecoco.app.exception.InsufficientCoconutsException;
 import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.service.CoconutService;
 import org.noixdecoco.app.service.SpeechService;
@@ -33,8 +34,8 @@ public class MainREST {
 	@Autowired
 	private CoconutService coconutService;
 	
-	//@Autowired
-	//private SpeechService speechService;
+	@Autowired
+	private SpeechService speechService;
 	
 	@Value("${bot.key}")
 	private String botToken;
@@ -77,18 +78,17 @@ public class MainREST {
 					if(names.size() > 0) {
 						MeMessageDTO message = new MeMessageDTO();
 						message.setChannel(event.getEvent().getChannel());
-						String text = "<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
+						String text = "";
 						for(String name : names) {
-							text += "<@" + name + ">, ";
 							try {
 								long numCoconuts = coconutService.addCoconut(event.getEvent().getUser(), name, 1);
-								text += " they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ".";
+								text += "<@"+event.getEvent().getUser()  + "> gave a coconut to <@" + name + ">, " +" they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ". ";
+							}  catch (InsufficientCoconutsException e) {
+								text += "<@"+event.getEvent().getUser()  + "> didn't have enough coconuts remaining for <@" + name + "> :sob:"; 
+							} catch(InvalidReceiverException e) {
+								text += "<@"+event.getEvent().getUser()  + " tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!";
 							} catch (CoconutException e) {
-								if (e instanceof InvalidReceiverException) {
-									text = "Sorry, you can't give yourself coconuts :sob: If you ask nicely, maybe someone will give you one!";
-								} else {
-									text = "I'm so sorry! Something went wrong with the coconut transfer. Poor coconut :scream:";
-								}
+								text += "Something went wrong. :sad:";
 							}
 						}
 						message.setText(text);
