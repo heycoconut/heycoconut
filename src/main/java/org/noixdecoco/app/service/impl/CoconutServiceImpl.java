@@ -68,7 +68,7 @@ public class CoconutServiceImpl implements CoconutService {
 		
 		giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);
 		giversLedger.setLastCoconutGivenAt(new Date());
-		coconutRepo.save(giversLedger);
+		coconutRepo.save(giversLedger).subscribe();
 		
 		List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
 		if(ledgers.isEmpty()) {
