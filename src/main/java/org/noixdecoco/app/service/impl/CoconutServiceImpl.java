@@ -93,7 +93,11 @@ public class CoconutServiceImpl implements CoconutService {
 
 	@Override
 	public long getCoconutsRemaining(String user) {
-		return dailyLimit - coconutRepo.findByUsername(user).blockFirst().getCoconutsGiven();
+		CoconutLedger ledger = coconutRepo.findByUsername(user).blockFirst();
+		if(ledger != null && ledger.getCoconutsGiven() != null) {
+			return dailyLimit - ledger.getCoconutsGiven();
+		}
+		return dailyLimit;
 	}
 
 	
