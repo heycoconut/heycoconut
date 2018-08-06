@@ -74,12 +74,12 @@ public class CoconutServiceImpl implements CoconutService {
 		if(ledgers.isEmpty()) {
 			CoconutLedger ledger = CoconutLedger.createNew();
 			ledger.setUsername(toUser);
-			ledger.setNumberOfCoconuts(Long.valueOf(1));
+			ledger.setNumberOfCoconuts(Long.valueOf(numCoconuts));
 			coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
 			return numCoconuts;
 		} else {
 			CoconutLedger ledger = ledgers.get(0);
-			ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
+			ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+numCoconuts);
 			LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
 			coconutRepo.save(ledger).subscribe();
 			return ledger.getNumberOfCoconuts();
