@@ -85,7 +85,7 @@ public class MainREST {
 								text += " they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ".";
 							} catch (CoconutException e) {
 								if (e instanceof InvalidReceiverException) {
-									text = "Sorry, you can't give me or yourself coconuts :sob: If you ask nicely, maybe someone will give you one!";
+									text = "Sorry, you can't give yourself coconuts :sob: If you ask nicely, maybe someone will give you one!";
 								} else {
 									text = "I'm so sorry! Something went wrong with the coconut transfer. Poor coconut :scream:";
 								}
