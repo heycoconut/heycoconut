@@ -43,7 +43,7 @@ public class CoconutServiceImpl implements CoconutService {
 		List<CoconutLedger> fromUserLedger = coconutRepo.findByUsername(fromUser).collectList().block();
 		if(fromUserLedger.size() > 0) {
 			giversLedger = fromUserLedger.get(0);
-			if(giversLedger.getLastCoconutGivenAt() != null && giversLedger.getLastCoconutGivenAt().before(startOfDay)) {
+			if(giversLedger.getLastCoconutGivenAt() == null || giversLedger.getLastCoconutGivenAt().before(startOfDay)) {
 				giversLedger.setCoconutsGiven(0l);
 				giversLedger.setLastCoconutGivenAt(new Date());
 			}
