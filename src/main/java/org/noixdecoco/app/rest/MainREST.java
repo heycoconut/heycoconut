@@ -48,6 +48,11 @@ public class MainREST {
 		coconutRepo.insert(p);
 		LOGGER.info("Inserted person:" + id);
 	}
+	
+	@GetMapping("/secretEndpointReset")
+	public void resetAll() {
+		coconutRepo.deleteAll().block();
+	}
 
 	@GetMapping("/coconut")
 	public Flux<CoconutLedger> getPerson(@RequestParam(name = "id", required = false) Long id) {
@@ -87,7 +92,8 @@ public class MainREST {
 							
 							List<CoconutLedger> ledgers = coconutRepo.findByUsername(name).collectList().block();
 							if(ledgers.isEmpty()) {
-								CoconutLedger ledger = new CoconutLedger(name);
+								CoconutLedger ledger = CoconutLedger.createNew();
+								ledger.setUsername(name);
 								ledger.setNumberOfCoconuts(Long.valueOf(1));
 								coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
 							} else {
