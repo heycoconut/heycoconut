@@ -1,5 +1,7 @@
 package org.noixdecoco.app.data.model;
 
+import java.util.Date;
+
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -13,6 +15,10 @@ public class CoconutLedger {
 	private String username; // Owner of this ledger
 	
 	private Long numberOfCoconuts; // Number of coconuts received total
+	
+	private Long coconutsGiven;
+	
+	private Date lastCoconutGiveAt;
 	
 	public CoconutLedger() {
 		
@@ -46,6 +52,22 @@ public class CoconutLedger {
 		return "CoconutLedger: [username=" + username + ", coconuts=" + numberOfCoconuts + "]";
 	}
 	
+	public Long getCoconutsGiven() {
+		return coconutsGiven;
+	}
+
+	public void setCoconutsGiven(Long coconutsGiven) {
+		this.coconutsGiven = coconutsGiven;
+	}
+
+	public Date getLastCoconutGiveAt() {
+		return lastCoconutGiveAt;
+	}
+
+	public void setLastCoconutGiveAt(Date lastCoconutGiveAt) {
+		this.lastCoconutGiveAt = lastCoconutGiveAt;
+	}
+
 	public static CoconutLedger createNew() {
 		CoconutLedger ledger = new CoconutLedger();
 		ledger.setId(new ObjectId());
