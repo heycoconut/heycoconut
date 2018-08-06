@@ -72,7 +72,7 @@ public class MainREST {
 							}  catch (InsufficientCoconutsException e) {
 								text += "<@"+event.getEvent().getUser()  + "> didn't have enough coconuts remaining for <@" + name + "> :sob:"; 
 							} catch(InvalidReceiverException e) {
-								text += "<@"+event.getEvent().getUser()  + " tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!";
+								text += "<@"+event.getEvent().getUser()  + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!";
 							} catch (CoconutException e) {
 								text += "Something went wrong. :sad:";
 							}
