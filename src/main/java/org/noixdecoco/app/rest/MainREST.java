@@ -33,8 +33,8 @@ public class MainREST {
 	@Autowired
 	private CoconutService coconutService;
 	
-	@Autowired
-	private SpeechService speechService;
+	//@Autowired
+	//private SpeechService speechService;
 	
 	@Value("${bot.key}")
 	private String botToken;
