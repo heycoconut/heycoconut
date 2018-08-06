@@ -8,14 +8,15 @@ import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.data.repository.CoconutLedgerRepository;
 import org.noixdecoco.app.exception.CoconutException;
-import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
+import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.service.CoconutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Service
 public class CoconutServiceImpl implements CoconutService {
@@ -88,6 +89,11 @@ public class CoconutServiceImpl implements CoconutService {
 	
 	public Flux<CoconutLedger> getAllLedgers() {
 		return coconutRepo.findAll();
+	}
+
+	@Override
+	public long getCoconutsRemaining(String user) {
+		return dailyLimit - coconutRepo.findByUsername(user).blockFirst().getCoconutsGiven();
 	}
 
 	
