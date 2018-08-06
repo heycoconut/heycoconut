@@ -53,9 +53,11 @@ public class MainREST {
 			LOGGER.info(event.getEvent().toString());
 			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && ("channel".equals(event.getEvent().getChannel_type()) || "group".equals(event.getEvent().getChannel_type()))) {
 				// Did someone give a coconut??? :O
+				
 				LOGGER.info(event.getEvent().getUser() + " just gave a coconut!");
 				
 				String eventText = event.getEvent().getText();
+				int numberOfCoconuts = eventText.split(":coconut:").length-1;
 				if(eventText.contains("<@")) {
 					//Text contains a mention of someone or multiple people
 					String[] allMentions = eventText.split("<@");
@@ -67,8 +69,10 @@ public class MainREST {
 						String text = "";
 						for(String name : names) {
 							try {
-								long numCoconuts = coconutService.addCoconut(event.getEvent().getUser(), name, 1);
-								text += "<@"+event.getEvent().getUser()  + "> gave a coconut to <@" + name + ">, " +" they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ". ";
+								long numCoconuts = coconutService.addCoconut(event.getEvent().getUser(), name, numberOfCoconuts);
+								text += "<@"+event.getEvent().getUser()  + "> gave " + numberOfCoconuts +
+										" coconut" + (numberOfCoconuts > 1 ? "s":"") + " to <@" + name + ">, " +
+										" they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ". ";
 							}  catch (InsufficientCoconutsException e) {
 								text += "<@"+event.getEvent().getUser()  + "> didn't have enough coconuts remaining for <@" + name + "> :sob:"; 
 							} catch(InvalidReceiverException e) {
