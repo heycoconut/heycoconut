@@ -88,7 +88,7 @@ public class MainREST {
 					if(names.size() > 0) {
 						String data = "{ \"channel\":\""+event.getEvent().getChannel()+"\", \"text\": \"<@"+event.getEvent().getUser()  + "> just gave a coconut to ";
 						for(String name : names) {
-							data += "<@" + name + "> ";
+							data += "<@" + name + ">, ";
 							
 							List<CoconutLedger> ledgers = coconutRepo.findByUsername(name).collectList().block();
 							if(ledgers.isEmpty()) {
@@ -96,11 +96,13 @@ public class MainREST {
 								ledger.setUsername(name);
 								ledger.setNumberOfCoconuts(Long.valueOf(1));
 								coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
+								data += "he now has 1 coconut! ";
 							} else {
 								CoconutLedger ledger = ledgers.get(0);
 								ledger.setNumberOfCoconuts(ledger.getNumberOfCoconuts()+1);
 								LOGGER.info(ledger.getUsername() + " now has " + ledger.getNumberOfCoconuts() + " coconut(s)");
 								coconutRepo.save(ledger).subscribe();
+								data += "he now has "+ ledger.getNumberOfCoconuts() +" coconuts! ";
 							}
 							
 						}
