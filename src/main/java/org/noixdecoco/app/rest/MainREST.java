@@ -6,7 +6,7 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.data.model.CoconutLedger;
-import org.noixdecoco.app.dto.MeMessageDTO;
+import org.noixdecoco.app.dto.MessageDTO;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
