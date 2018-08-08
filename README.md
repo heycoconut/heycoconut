@@ -1,5 +1,5 @@
-# heycoconut
-Slack bot similar to heytaco to gift and track coconuts
+# Heycoconut
+Heycoconut is a slack bot that allows us to gift and track coconuts. It is written in Java and uses spring boot. It tracks coconuts in a mongodb server and uses reactive style objects for managing the REST endpoints and DB access. It is a fun little project we started developing to practice programming and to have a fun bot in our slack workspace that allows us to give kudos to each other.
 
 ## Requirements
  - Mongodb server
