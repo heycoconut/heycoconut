@@ -15,6 +15,7 @@ Slack bot similar to heytaco to gift and track coconuts
     
 ## How to use
 Once the app is installed in your workspace, invite the boy into a channel by tagging them. Once the bot is in the channel you can give someone a coconut (or more) by tagging them and putting coconut emojis. `e.g. @Raymond :coconut: :coconut: Thanks for lending me your sick japanese knife!`
+
 ![image](https://user-images.githubusercontent.com/14881741/43834626-bd07ecba-9adc-11e8-904d-ea3e049079ec.png)
 
 Heycoconut will reply with `@Alec gave 2 coconuts to @Raymond. They now have 2 coconuts`. You can also tag multiple people to give to more than one person at a time. Heycoconut will also DM the person giving the coconuts to let them know how many coconuts they have left. 
