@@ -18,4 +18,7 @@ Once the app is installed in your workspace, invite the boy into a channel by ta
 
 ![image](https://user-images.githubusercontent.com/14881741/43834626-bd07ecba-9adc-11e8-904d-ea3e049079ec.png)
 
+![image](https://user-images.githubusercontent.com/14881741/43834889-df96ffa4-9add-11e8-8cb5-47edf5c95944.png)
+
+
 You can also tag multiple people to give to more than one person at a time. Heycoconut will also DM the person giving the coconuts to let them know how many coconuts they have left. 
