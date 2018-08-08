@@ -79,7 +79,7 @@ public class EventDTO {
 				"\nts: " + ts +
 				"\ntext:" + text +
 				"\nevent_ts: " + event_ts +
-				"\nchannel_type: " + channel;
+				"\nchannel_type: " + channel_type;
 	}
 	
 }
