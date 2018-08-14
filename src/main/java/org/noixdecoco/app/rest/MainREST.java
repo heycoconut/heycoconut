@@ -96,7 +96,7 @@ public class MainREST {
 						speechService.sendMessage(request.getEvent().getChannel(), text);
 						
 						long coconutsRemaining = coconutService.getCoconutsRemaining(request.getEvent().getUser());
-						speechService.sendMessage(request.getEvent().getUser(), "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* left to give today.");
+						speechService.sendMessage(request.getEvent().getUser(), "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
 						
 					}
 					
