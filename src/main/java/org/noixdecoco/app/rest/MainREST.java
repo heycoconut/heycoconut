@@ -14,6 +14,7 @@ import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.service.CoconutService;
 import org.noixdecoco.app.service.SpeechService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -57,7 +58,7 @@ public class MainREST {
 				LOGGER.info(event.getEvent().getUser() + " just gave a coconut!");
 				
 				String eventText = event.getEvent().getText();
-				int numberOfCoconuts = eventText.split(":coconut:").length-1;
+				int numberOfCoconuts = StringUtils.countOccurrencesOf(eventText, ":coconut:");
 				if(eventText.contains("<@")) {
 					//Text contains a mention of someone or multiple people
 					String[] allMentions = eventText.split("<@");
