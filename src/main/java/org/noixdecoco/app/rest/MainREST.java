@@ -44,13 +44,7 @@ public class MainREST {
 		LOGGER.info("Getting ledgers");
 		return coconutService.getAllLedgers();
 	}
-	
-	@GetMapping("/secretEndpointReset")
-	public Flux<CoconutLedger> resetCoconutLedgers() {
-		LOGGER.info("Getting ledgers");
-		return coconutService.getAllLedgers();
-	}
-	
+
 	@PostMapping("/event")
 	public Flux<SlackRequestDTO> challenge(@RequestBody SlackRequestDTO event) {
 		if(event.getChallenge() != null) {
