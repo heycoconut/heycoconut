@@ -62,7 +62,7 @@ public class MainREST {
 			LOGGER.info("Getting challenged:" + request.getChallenge());
 		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEvent_id())) {
 			treatedEventIds.add(request.getEvent_id());
-			LOGGER.info(request.getEvent().toString());
+			LOGGER.info(request.toString());
 			if(request.getEvent().getText() != null && request.getEvent().getText().contains(":coconut:") && ("channel".equals(request.getEvent().getChannel_type()) || "group".equals(request.getEvent().getChannel_type()))) {
 				// Did someone give a coconut??? :O
 				
