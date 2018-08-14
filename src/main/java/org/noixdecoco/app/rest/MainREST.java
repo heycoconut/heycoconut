@@ -57,18 +57,18 @@ public class MainREST {
 	}
 
 	@PostMapping("/event")
-	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestBody SlackRequestDTO event) {
-		if(event.getChallenge() != null) {
-			LOGGER.info("Getting challenged:" + event.getChallenge());
-		} else if(event.getEvent() != null && !treatedEventIds.contains(event.getEvent_id())) {
-			treatedEventIds.add(event.getEvent_id());
-			LOGGER.info(event.getEvent().toString());
-			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && ("channel".equals(event.getEvent().getChannel_type()) || "group".equals(event.getEvent().getChannel_type()))) {
+	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestBody SlackRequestDTO request) {
+		if(request.getChallenge() != null) {
+			LOGGER.info("Getting challenged:" + request.getChallenge());
+		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEvent_id())) {
+			treatedEventIds.add(request.getEvent_id());
+			LOGGER.info(request.getEvent().toString());
+			if(request.getEvent().getText() != null && request.getEvent().getText().contains(":coconut:") && ("channel".equals(request.getEvent().getChannel_type()) || "group".equals(request.getEvent().getChannel_type()))) {
 				// Did someone give a coconut??? :O
 				
-				LOGGER.info(event.getEvent().getUser() + " just gave a coconut!");
+				LOGGER.info(request.getEvent().getUser() + " just gave a coconut!");
 				
-				String eventText = event.getEvent().getText();
+				String eventText = request.getEvent().getText();
 				int numberOfCoconuts = StringUtils.countOccurrencesOf(eventText, ":coconut:");
 				if(eventText.contains("<@")) {
 					//Text contains a mention of someone or multiple people
@@ -81,22 +81,22 @@ public class MainREST {
 						String text = "";
 						for(String name : names) {
 							try {
-								long numCoconuts = coconutService.addCoconut(event.getEvent().getUser(), name, numberOfCoconuts);
-								text += "<@"+event.getEvent().getUser()  + "> gave " + numberOfCoconuts +
+								long numCoconuts = coconutService.addCoconut(request.getEvent().getUser(), name, numberOfCoconuts);
+								text += "<@"+request.getEvent().getUser()  + "> gave " + numberOfCoconuts +
 										" coconut" + (numberOfCoconuts > 1 ? "s":"") + " to <@" + name + ">, " +
 										" they now have " + numCoconuts + " coconut" + (numCoconuts > 1 ? "s":"") + ". ";
 							}  catch (InsufficientCoconutsException e) {
-								text += "<@"+event.getEvent().getUser()  + "> didn't have enough coconuts remaining for <@" + name + "> :sob:"; 
+								text += "<@"+request.getEvent().getUser()  + "> didn't have enough coconuts remaining for <@" + name + "> :sob:"; 
 							} catch(InvalidReceiverException e) {
-								text += "<@"+event.getEvent().getUser()  + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!";
+								text += "<@"+request.getEvent().getUser()  + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!";
 							} catch (CoconutException e) {
 								text += "Something went wrong. :sad:";
 							}
 						}
-						speechService.sendMessage(event.getEvent().getChannel(), text);
+						speechService.sendMessage(request.getEvent().getChannel(), text);
 						
-						long coconutsRemaining = coconutService.getCoconutsRemaining(event.getEvent().getUser());
-						speechService.sendMessage(event.getEvent().getUser(), "You are so kind to give coconuts! You now have " +coconutsRemaining + " left to give today :+1:");
+						long coconutsRemaining = coconutService.getCoconutsRemaining(request.getEvent().getUser());
+						speechService.sendMessage(request.getEvent().getUser(), "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* left to give today.");
 						
 					}
 					
@@ -105,7 +105,7 @@ public class MainREST {
 			}
 		}
 		
-		return Flux.just(event);
+		return Flux.just(request);
 	}
 
 }
