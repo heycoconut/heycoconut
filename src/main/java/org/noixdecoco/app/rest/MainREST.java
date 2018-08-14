@@ -3,6 +3,7 @@ package org.noixdecoco.app.rest;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.collect.EvictingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.data.model.CoconutLedger;
@@ -34,23 +35,33 @@ public class MainREST {
 	@Autowired
 	private SpeechService speechService;
 
-	@RequestMapping("/health")
-	public String health() {
-		LOGGER.info("Check check....");
-		return "I'm alright, how about you?";
+	private EvictingQueue<String> treatedEventIds;
+
+	private static final int EVENT_ID_QUEUE_SIZE = 500;
+
+	public MainREST() {
+		treatedEventIds = EvictingQueue.create(EVENT_ID_QUEUE_SIZE);
 	}
 
-	@GetMapping("/coconut")
+	@RequestMapping("/health")
+	public String health() {
+		LOGGER.info("Health check....");
+		return "Healthy as can be";
+	}
+
+	// Disable viewing of everyone's coconuts
+	//@GetMapping("/coconut")
 	public Flux<CoconutLedger> getAllCoconutLedgers() {
 		LOGGER.info("Getting ledgers");
 		return coconutService.getAllLedgers();
 	}
 
 	@PostMapping("/event")
-	public Flux<SlackRequestDTO> challenge(@RequestBody SlackRequestDTO event) {
+	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestBody SlackRequestDTO event) {
 		if(event.getChallenge() != null) {
 			LOGGER.info("Getting challenged:" + event.getChallenge());
-		} else if(event.getEvent() != null) {
+		} else if(event.getEvent() != null && !treatedEventIds.contains(event.getEvent_id())) {
+			treatedEventIds.add(event.getEvent_id());
 			LOGGER.info(event.getEvent().toString());
 			if(event.getEvent().getText() != null && event.getEvent().getText().contains(":coconut:") && ("channel".equals(event.getEvent().getChannel_type()) || "group".equals(event.getEvent().getChannel_type()))) {
 				// Did someone give a coconut??? :O

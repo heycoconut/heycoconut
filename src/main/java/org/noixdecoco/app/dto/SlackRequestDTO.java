@@ -6,6 +6,7 @@ public class SlackRequestDTO {
 	private String challenge;
 	private String type;
 	private EventDTO event;
+	private String event_id;
 	
 	public SlackRequestDTO() {
 		
@@ -42,9 +43,17 @@ public class SlackRequestDTO {
 	public void setEvent(EventDTO event) {
 		this.event = event;
 	}
-	
+
+	public String getEvent_id() {
+		return event_id;
+	}
+
+	public void setEvent_id(String event_id) {
+		this.event_id = event_id;
+	}
+
 	@Override
 	public String toString() {
-		return event.toString();
+		return "Event_id=" + event_id + ": " + event.toString();
 	}
 }
