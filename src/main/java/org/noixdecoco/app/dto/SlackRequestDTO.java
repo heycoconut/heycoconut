@@ -1,12 +1,16 @@
 package org.noixdecoco.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class SlackRequestDTO {
 	
 	private String token;
 	private String challenge;
 	private String type;
 	private EventDTO event;
-	private String event_id;
+
+	@JsonProperty("event_id")
+	private String eventId;
 
 	public String getToken() {
 		return token;
@@ -40,16 +44,16 @@ public class SlackRequestDTO {
 		this.event = event;
 	}
 
-	public String getEvent_id() {
-		return event_id;
+	public String getEventId() {
+		return eventId;
 	}
 
-	public void setEvent_id(String event_id) {
-		this.event_id = event_id;
+	public void setEventId(String eventId) {
+		this.eventId = eventId;
 	}
 
 	@Override
 	public String toString() {
-		return "Event_id=" + event_id + ": " + event.toString();
+		return "Event_id=" + eventId + ": " + event.toString();
 	}
 }
