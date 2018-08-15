@@ -1,13 +1,9 @@
 package org.noixdecoco.app.rest;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.common.collect.EvictingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.data.model.CoconutLedger;
-import org.noixdecoco.app.dto.MessageDTO;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
@@ -16,13 +12,14 @@ import org.noixdecoco.app.service.CoconutService;
 import org.noixdecoco.app.service.SpeechService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import reactor.core.publisher.Flux;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class MainREST {
