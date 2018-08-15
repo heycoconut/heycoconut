@@ -5,10 +5,6 @@ public class MessageDTO {
 	private String text;
 	private String channel;
 	private Boolean as_user = Boolean.TRUE;
-	
-	public MessageDTO() {
-		
-	}
 
 	public String getText() {
 		return text;

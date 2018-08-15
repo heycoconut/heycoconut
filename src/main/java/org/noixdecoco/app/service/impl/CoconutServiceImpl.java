@@ -60,10 +60,9 @@ public class CoconutServiceImpl implements CoconutService {
 			} else {
 				throw new InsufficientCoconutsException(dailyLimit);
 			}
-		} else if(giversLedger.getLastCoconutGivenAt().after(startOfDay)) {
-			if(giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit) {
-				throw new InsufficientCoconutsException(giversLedger.getCoconutsGiven());
-			}
+		} else if(giversLedger.getLastCoconutGivenAt().after(startOfDay) &&
+				giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit) {
+			throw new InsufficientCoconutsException(giversLedger.getCoconutsGiven());
 		}
 		
 		giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);

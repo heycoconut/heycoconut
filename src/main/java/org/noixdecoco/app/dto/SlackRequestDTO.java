@@ -7,10 +7,6 @@ public class SlackRequestDTO {
 	private String type;
 	private EventDTO event;
 	private String event_id;
-	
-	public SlackRequestDTO() {
-		
-	}
 
 	public String getToken() {
 		return token;

@@ -20,10 +20,6 @@ public class CoconutLedger {
 	
 	private Date lastCoconutGivenAt;
 	
-	public CoconutLedger() {
-		
-	}
-	
 	public ObjectId getId() {
 		return id;
 	}
