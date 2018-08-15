@@ -1,5 +1,7 @@
 package org.noixdecoco.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class EventDTO {
 	
 	private String type;
@@ -7,8 +9,12 @@ public class EventDTO {
 	private String user;
 	private String text;
 	private String ts;
-	private String event_ts; //TODO use camel case and specify JSON name
-	private String channel_type; //TODO use camel case and specify JSON name
+
+	@JsonProperty("event_ts")
+	private String eventTs;
+
+	@JsonProperty("channel_type")
+	private String channelType;
 
 	public String getType() {
 		return type;
@@ -50,20 +56,20 @@ public class EventDTO {
 		this.ts = ts;
 	}
 
-	public String getEvent_ts() {
-		return event_ts;
+	public String getEventTs() {
+		return eventTs;
 	}
 
-	public void setEvent_ts(String event_ts) {
-		this.event_ts = event_ts;
+	public void setEventTs(String eventTs) {
+		this.eventTs = eventTs;
 	}
 
-	public String getChannel_type() {
-		return channel_type;
+	public String getChannelType() {
+		return channelType;
 	}
 
-	public void setChannel_type(String channel_type) {
-		this.channel_type = channel_type;
+	public void setChannelType(String channelType) {
+		this.channelType = channelType;
 	}
 	
 	@Override
@@ -74,8 +80,8 @@ public class EventDTO {
 				"\nuser: " + user +
 				"\nts: " + ts +
 				"\ntext:" + text +
-				"\nevent_ts: " + event_ts +
-				"\nchannel_type: " + channel_type;
+				"\neventTs: " + eventTs +
+				"\nchannelType: " + channelType;
 	}
 	
 }

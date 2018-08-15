@@ -60,7 +60,7 @@ public class MainREST {
 		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEventId())) {
 			treatedEventIds.add(request.getEventId());
 			LOGGER.info(request.toString());
-			if(request.getEvent().getText() != null && request.getEvent().getText().contains(":coconut:") && ("channel".equals(request.getEvent().getChannel_type()) || "group".equals(request.getEvent().getChannel_type()))) {
+			if(request.getEvent().getText() != null && request.getEvent().getText().contains(":coconut:") && ("channel".equals(request.getEvent().getChannelType()) || "group".equals(request.getEvent().getChannelType()))) {
 				// Did someone give a coconut??? :O
 				
 				LOGGER.info(request.getEvent().getUser() + " just gave a coconut!");
