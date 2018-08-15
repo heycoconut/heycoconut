@@ -1,4 +1,4 @@
-# Heycoconut ![Travis build](https://travis-ci.com/alecc08/heycoconut.svg?branch=master)
+# Heycoconut ![Travis build](https://travis-ci.com/alecc08/heycoconut.svg?branch=master) [![Codacy Badge](https://api.codacy.com/project/badge/Grade/c08f892014994bde9999fc569810938e)](https://www.codacy.com/project/alecc/heycoconut/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=alecc08/heycoconut&amp;utm_campaign=Badge_Grade_Dashboard)
 Heycoconut is a slack bot that allows us to gift and track coconuts. It is written in Java and uses spring boot. It tracks coconuts in a mongodb server and uses reactive style objects for managing the REST endpoints and DB access. It is a fun little project we started developing to practice programming and to have a fun bot in our slack workspace that allows us to give kudos to each other.
 
 ## How to use
