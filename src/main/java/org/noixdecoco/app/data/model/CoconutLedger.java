@@ -1,10 +1,10 @@
 package org.noixdecoco.app.data.model;
 
-import java.util.Date;
-
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.util.Date;
 
 @Document(collection = "coconutledgers")
 public class CoconutLedger {
@@ -19,10 +19,6 @@ public class CoconutLedger {
 	private Long coconutsGiven;
 	
 	private Date lastCoconutGivenAt;
-	
-	public CoconutLedger() {
-		
-	}
 	
 	public ObjectId getId() {
 		return id;

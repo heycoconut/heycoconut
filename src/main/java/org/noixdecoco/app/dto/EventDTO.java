@@ -10,10 +10,6 @@ public class EventDTO {
 	private String event_ts; //TODO use camel case and specify JSON name
 	private String channel_type; //TODO use camel case and specify JSON name
 
-	public EventDTO() {
-		
-	}
-
 	public String getType() {
 		return type;
 	}
