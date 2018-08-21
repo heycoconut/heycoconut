@@ -29,10 +29,7 @@ public class MainREST {
 	private static final Logger LOGGER = LogManager.getLogger(MainREST.class);
 
 	@Autowired
-	private CoconutService coconutService;
-	
-	@Autowired
-	private SpeechService speechService;
+	private CoconutCommandHelper commandHelper;
 
 	private EvictingQueue<String> treatedEventIds;
 
@@ -57,7 +54,7 @@ public class MainREST {
 			// Add eventId to treatedEventIds to prevent reprocessing
 			treatedEventIds.add(request.getEventId());
 			LOGGER.info(request.toString());
-			CoconutCommand command = CoconutCommandHelper.buildFromRequest(request);
+			CoconutCommand command = commandHelper.buildFromRequest(request);
 			if(command != null) {
 				command.execute();
 			}
