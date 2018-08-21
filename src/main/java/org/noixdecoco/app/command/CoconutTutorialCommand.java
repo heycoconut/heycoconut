@@ -1,8 +1,13 @@
 package org.noixdecoco.app.command;
 
+import org.springframework.beans.factory.annotation.Value;
+
 public class CoconutTutorialCommand extends CoconutCommand {
 
     private String channel;
+
+    @Value("${tutorial.message}")
+    private String tutorialMessage;
 
     public CoconutTutorialCommand(String channel) {
         this.channel = channel;
@@ -15,6 +20,6 @@ public class CoconutTutorialCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        speechService.sendMessage(channel, "Thank you for using HeyCoconut! <INSERT TUTORIAL TEXT HERE");
+        speechService.sendMessage(channel, tutorialMessage);
     }
 }

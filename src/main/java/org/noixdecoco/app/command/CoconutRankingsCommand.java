@@ -16,6 +16,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         // TODO: Gather stats and rankings, print results to channel
+        ledgerRepo.getUsersByTotalCoconutCount(10);
         speechService.sendMessage(channel, "TODO: Leaderboards...");
     }
 }

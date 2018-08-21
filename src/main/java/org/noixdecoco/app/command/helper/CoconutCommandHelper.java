@@ -2,7 +2,6 @@ package org.noixdecoco.app.command.helper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.apache.logging.log4j.core.util.SetUtils;
 import org.noixdecoco.app.command.*;
 import org.noixdecoco.app.dto.EventDTO;
 import org.noixdecoco.app.dto.SlackRequestDTO;
@@ -13,8 +12,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -79,8 +76,7 @@ public class CoconutCommandHelper {
         int coconutsToGive = extractNumberOfCoconuts(event.getText());
         String giver = event.getUser();
         Set<String> receivers = extractTaggedUsers(event.getText());
-        GiveCoconutCommand command = new GiveCoconutCommand(giver, receivers, event.getChannel(), coconutsToGive);
-        return command;
+        return new GiveCoconutCommand(giver, receivers, event.getChannel(), coconutsToGive);
     }
 
     private int extractNumberOfCoconuts(String message) {
