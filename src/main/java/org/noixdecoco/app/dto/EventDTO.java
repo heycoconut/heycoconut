@@ -9,12 +9,20 @@ public class EventDTO {
 	private String user;
 	private String text;
 	private String ts;
+	private String reaction;
+
+	private ItemDTO item;
+
+	@JsonProperty("item_user")
+	private String itemUser;
 
 	@JsonProperty("event_ts")
 	private String eventTs;
 
 	@JsonProperty("channel_type")
 	private String channelType;
+
+
 
 	public String getType() {
 		return type;
@@ -71,7 +79,31 @@ public class EventDTO {
 	public void setChannelType(String channelType) {
 		this.channelType = channelType;
 	}
-	
+
+	public String getReaction() {
+		return reaction;
+	}
+
+	public void setReaction(String reaction) {
+		this.reaction = reaction;
+	}
+
+	public ItemDTO getItem() {
+		return item;
+	}
+
+	public void setItem(ItemDTO item) {
+		this.item = item;
+	}
+
+	public String getItemUser() {
+		return itemUser;
+	}
+
+	public void setItemUser(String itemUser) {
+		this.itemUser = itemUser;
+	}
+
 	@Override
 	public String toString() {
 		return "EventDTO:\n" +
@@ -79,6 +111,9 @@ public class EventDTO {
 				"\nchannel: " + channel +
 				"\nuser: " + user +
 				"\nts: " + ts +
+				"\nreaction: " + reaction +
+				"\nitem_user: " + itemUser +
+				"\nitem:" + item +
 				"\ntext:" + text +
 				"\neventTs: " + eventTs +
 				"\nchannelType: " + channelType;

@@ -23,9 +23,7 @@ public abstract class CoconutCommand {
     protected CoconutLedgerRepository ledgerRepo;
 
     public void execute() {
-        LOGGER.info("Executing " + this.getClass().getName());
         if(validate()) {
-            LOGGER.info("Passed validation");
             performAction();
         }
     }

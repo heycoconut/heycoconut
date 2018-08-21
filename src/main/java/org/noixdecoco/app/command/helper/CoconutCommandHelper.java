@@ -2,6 +2,7 @@ package org.noixdecoco.app.command.helper;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.util.SetUtils;
 import org.noixdecoco.app.command.*;
 import org.noixdecoco.app.dto.EventDTO;
 import org.noixdecoco.app.dto.SlackRequestDTO;
@@ -12,6 +13,8 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,11 +45,9 @@ public class CoconutCommandHelper {
                         command = new CoconutRankingsCommand(request.getEvent().getChannel());
                     }
                     break;
-                case "channel":
-                case "group":
+                case "message":
                     // Message in a channel/group
                     if (message.contains(COCONUT_EMOJI) && message.contains(TAG_START)) {
-                        LOGGER.info("Building GiveCoconutCommand");
                         command = buildGiveCoconutCommand(request.getEvent());
                     }
                     break;
@@ -56,8 +57,15 @@ public class CoconutCommandHelper {
                         command = new GreetingCommand(request.getEvent().getUser(), request.getEvent().getChannel());
                     }
                     break;
+                case "reaction_added":
+                    if (request.getEvent().getReaction().equalsIgnoreCase("coconut")) {
+                        Set<String> receivers = new HashSet<>();
+                        receivers.add(request.getEvent().getItemUser());
+                        command = new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getItem().getChannel(),1);
+                    }
+                    break;
                 default:
-                    LOGGER.debug(String.format("Unsupported event type: %s", request.getEvent().getType()));
+                    LOGGER.info(String.format("Unsupported event type: %s", request.getEvent().getType()));
                     break;
             }
         }
