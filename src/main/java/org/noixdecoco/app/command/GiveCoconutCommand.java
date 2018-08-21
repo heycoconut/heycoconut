@@ -1,6 +1,5 @@
 package org.noixdecoco.app.command;
 
-import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
 import org.noixdecoco.app.exception.InvalidReceiverException;
