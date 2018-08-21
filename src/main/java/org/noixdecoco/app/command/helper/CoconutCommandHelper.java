@@ -46,6 +46,7 @@ public class CoconutCommandHelper {
                 case "group":
                     // Message in a channel/group
                     if (message.contains(COCONUT_EMOJI) && message.contains(TAG_START)) {
+                        LOGGER.info("Building GiveCoconutCommand");
                         command = buildGiveCoconutCommand(request.getEvent());
                     }
                     break;
@@ -79,7 +80,7 @@ public class CoconutCommandHelper {
     }
 
     private Set<String> extractTaggedUsers(String message) {
-        String[] allMentions = message.split("<@");
+        String[] allMentions = message.split(TAG_START);
         Set<String> names = new HashSet<>();
         for (int i=1; i<allMentions.length; i++) { // Skip first element in array which doesnt start with @
             names.add(allMentions[i].substring(0, allMentions[i].indexOf('>')));

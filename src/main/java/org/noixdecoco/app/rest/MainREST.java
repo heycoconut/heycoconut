@@ -13,11 +13,9 @@ import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.service.CoconutService;
 import org.noixdecoco.app.service.SpeechService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
 import java.util.ArrayList;
@@ -47,7 +45,8 @@ public class MainREST {
 	}
 
 	@PostMapping("/event")
-	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestBody SlackRequestDTO request) {
+	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody SlackRequestDTO request) {
+		LOGGER.info("Headers: " + headers.toString());
 		if(request.getChallenge() != null) {
 			LOGGER.info("Getting challenged:" + request.getChallenge());
 		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEventId())) {
