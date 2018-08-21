@@ -39,7 +39,7 @@ public class CoconutCommandHelper {
                     if (message.toLowerCase().contains(HELP)) {
                         command = new CoconutTutorialCommand(request.getEvent().getChannel());
                     } else if (message.toLowerCase().contains(LEADERBOARD)) {
-                        command = new CoconutRankingsCommand();
+                        command = new CoconutRankingsCommand(request.getEvent().getChannel());
                     }
                     break;
                 case "channel":
