@@ -1,5 +1,10 @@
 package org.noixdecoco.app.command;
 
+import org.noixdecoco.app.data.model.CoconutLedger;
+import org.springframework.data.domain.Sort;
+
+import java.util.List;
+
 public class CoconutRankingsCommand extends CoconutCommand {
 
     private String channel;
@@ -15,8 +20,19 @@ public class CoconutRankingsCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        // TODO: Gather stats and rankings, print results to channel
-        ledgerRepo.getUsersByTotalCoconutCount(10);
-        speechService.sendMessage(channel, "TODO: Leaderboards...");
+        Sort sort = new Sort(Sort.Direction.DESC, "numberOfCoconuts");
+        List<CoconutLedger> topTen = ledgerRepo.findAll(sort).buffer(10).blockFirst();
+
+        speechService.sendMessage(channel, composeLeaderboard(topTen));
+    }
+
+    private String composeLeaderboard(List<CoconutLedger> topLedgers) {
+        StringBuilder builder = new StringBuilder();
+        builder.append("Leaderboard\n```--------------------------------\n");
+        int currentRank = 1;
+        for (CoconutLedger ledger : topLedgers) {
+            builder.append(currentRank++).append(". <@").append(ledger.getUsername()).append("> :").append(ledger.getNumberOfCoconuts());
+        }
+        return builder.toString();
     }
 }
