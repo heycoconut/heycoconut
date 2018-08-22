@@ -28,10 +28,10 @@ public class CoconutRankingsCommand extends CoconutCommand {
 
     private String composeLeaderboard(List<CoconutLedger> topLedgers) {
         StringBuilder builder = new StringBuilder();
-        builder.append("Leaderboard\n```--------------------------------\n");
+        builder.append("*Leaderboard*\n\n");
         int currentRank = 1;
         for (CoconutLedger ledger : topLedgers) {
-            builder.append(currentRank++).append(". <@").append(ledger.getUsername()).append("> :").append(ledger.getNumberOfCoconuts());
+            builder.append(currentRank++).append(". <@").append(ledger.getUsername()).append(">: ").append(ledger.getNumberOfCoconuts()).append("\n");
         }
         return builder.toString();
     }
