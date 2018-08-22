@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,43 +29,33 @@ public class CoconutServiceImpl implements CoconutService {
 	private long dailyLimit;
 
 	@Override
-	public long addCoconut(String fromUser, String toUser, int numCoconuts) throws CoconutException {
+	public long giveCoconut(String fromUser, String toUser, int numCoconuts) throws CoconutException {
 		if(fromUser.equals(toUser)) {
 			throw new InvalidReceiverException();
 		}
 		
 		CoconutLedger giversLedger = null;
-		
-		Date startOfDay = new Date();
-		startOfDay.setHours(0);
-		startOfDay.setMinutes(0);
-		startOfDay.setSeconds(0);
+		LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
 		List<CoconutLedger> fromUserLedger = coconutRepo.findByUsername(fromUser).collectList().block();
-		if(fromUserLedger.size() > 0) {
+		if(!fromUserLedger.isEmpty()) {
 			giversLedger = fromUserLedger.get(0);
-			if(giversLedger.getLastCoconutGivenAt() == null || giversLedger.getLastCoconutGivenAt().before(startOfDay)) {
+			if(giversLedger.getLastCoconutGivenAt() == null || giversLedger.getLastCoconutGivenAt().isBefore(startOfDay)) {
 				giversLedger.setCoconutsGiven(0l);
-				giversLedger.setLastCoconutGivenAt(new Date());
+				giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
 			}
 		} else {
 			giversLedger = CoconutLedger.createNew();
 			giversLedger.setUsername(fromUser);
 			giversLedger.setCoconutsGiven(0l);
-			giversLedger.setLastCoconutGivenAt(new Date());
+			giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
 		}
-		if(numCoconuts > dailyLimit) {
-			if(giversLedger.getLastCoconutGivenAt().after(startOfDay)) {
-				throw new InsufficientCoconutsException(dailyLimit - giversLedger.getCoconutsGiven());
-			} else {
-				throw new InsufficientCoconutsException(dailyLimit);
-			}
-		} else if(giversLedger.getLastCoconutGivenAt().after(startOfDay) &&
-				giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit) {
-			throw new InsufficientCoconutsException(giversLedger.getCoconutsGiven());
+		if(numCoconuts > dailyLimit || (giversLedger.getLastCoconutGivenAt().isAfter(startOfDay) &&
+				giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit)) {
+			throw new InsufficientCoconutsException();
 		}
 		
 		giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);
-		giversLedger.setLastCoconutGivenAt(new Date());
+		giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
 		coconutRepo.save(giversLedger).subscribe();
 		
 		List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
@@ -72,7 +63,7 @@ public class CoconutServiceImpl implements CoconutService {
 			CoconutLedger ledger = CoconutLedger.createNew();
 			ledger.setUsername(toUser);
 			ledger.setNumberOfCoconuts(Long.valueOf(numCoconuts));
-			coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
+			coconutRepo.insert(ledger).subscribe(LOGGER::info);
 			return numCoconuts;
 		} else {
 			CoconutLedger ledger = ledgers.get(0);

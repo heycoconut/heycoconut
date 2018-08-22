@@ -4,7 +4,7 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Document(collection = "coconutledgers")
 public class CoconutLedger {
@@ -18,7 +18,7 @@ public class CoconutLedger {
 	
 	private Long coconutsGiven;
 	
-	private Date lastCoconutGivenAt;
+	private LocalDateTime lastCoconutGivenAt;
 	
 	public ObjectId getId() {
 		return id;
@@ -56,11 +56,11 @@ public class CoconutLedger {
 		this.coconutsGiven = coconutsGiven;
 	}
 
-	public Date getLastCoconutGivenAt() {
+	public LocalDateTime getLastCoconutGivenAt() {
 		return lastCoconutGivenAt;
 	}
 
-	public void setLastCoconutGivenAt(Date lastCoconutGivenAt) {
+	public void setLastCoconutGivenAt(LocalDateTime lastCoconutGivenAt) {
 		this.lastCoconutGivenAt = lastCoconutGivenAt;
 	}
 
