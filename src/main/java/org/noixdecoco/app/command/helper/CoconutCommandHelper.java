@@ -44,7 +44,7 @@ public class CoconutCommandHelper {
                     break;
                 case "message":
                     // Message in a channel/group
-                    if (message.contains(COCONUT_EMOJI) && message.contains(TAG_START)) {
+                    if (message != null && message.contains(COCONUT_EMOJI) && message.contains(TAG_START)) {
                         command = buildGiveCoconutCommand(request.getEvent());
                     }
                     break;

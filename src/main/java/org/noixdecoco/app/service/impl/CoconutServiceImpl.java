@@ -15,7 +15,6 @@ import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service
@@ -38,7 +37,7 @@ public class CoconutServiceImpl implements CoconutService {
 		CoconutLedger giversLedger = null;
 		LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
 		List<CoconutLedger> fromUserLedger = coconutRepo.findByUsername(fromUser).collectList().block();
-		if(fromUserLedger.size() > 0) {
+		if(!fromUserLedger.isEmpty()) {
 			giversLedger = fromUserLedger.get(0);
 			if(giversLedger.getLastCoconutGivenAt() == null || giversLedger.getLastCoconutGivenAt().isBefore(startOfDay)) {
 				giversLedger.setCoconutsGiven(0l);
@@ -50,15 +49,9 @@ public class CoconutServiceImpl implements CoconutService {
 			giversLedger.setCoconutsGiven(0l);
 			giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
 		}
-		if(numCoconuts > dailyLimit) {
-			if(giversLedger.getLastCoconutGivenAt().isAfter(startOfDay)) {
-				throw new InsufficientCoconutsException(dailyLimit - giversLedger.getCoconutsGiven());
-			} else {
-				throw new InsufficientCoconutsException(dailyLimit);
-			}
-		} else if(giversLedger.getLastCoconutGivenAt().isAfter(startOfDay) &&
-				giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit) {
-			throw new InsufficientCoconutsException(giversLedger.getCoconutsGiven());
+		if(numCoconuts > dailyLimit || (giversLedger.getLastCoconutGivenAt().isAfter(startOfDay) &&
+				giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit)) {
+			throw new InsufficientCoconutsException();
 		}
 		
 		giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);
@@ -70,7 +63,7 @@ public class CoconutServiceImpl implements CoconutService {
 			CoconutLedger ledger = CoconutLedger.createNew();
 			ledger.setUsername(toUser);
 			ledger.setNumberOfCoconuts(Long.valueOf(numCoconuts));
-			coconutRepo.insert(ledger).subscribe((coconut) -> LOGGER.info(coconut)); 
+			coconutRepo.insert(ledger).subscribe(LOGGER::info);
 			return numCoconuts;
 		} else {
 			CoconutLedger ledger = ledgers.get(0);
