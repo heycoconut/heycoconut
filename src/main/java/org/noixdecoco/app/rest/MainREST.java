@@ -5,21 +5,11 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.command.CoconutCommand;
 import org.noixdecoco.app.command.helper.CoconutCommandHelper;
-import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.dto.SlackRequestDTO;
-import org.noixdecoco.app.exception.CoconutException;
-import org.noixdecoco.app.exception.InsufficientCoconutsException;
-import org.noixdecoco.app.exception.InvalidReceiverException;
-import org.noixdecoco.app.service.CoconutService;
-import org.noixdecoco.app.service.SpeechService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @RestController
 public class MainREST {
