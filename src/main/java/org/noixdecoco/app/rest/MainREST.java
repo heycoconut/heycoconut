@@ -6,6 +6,7 @@ import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.command.CoconutCommand;
 import org.noixdecoco.app.command.helper.CoconutCommandHelper;
 import org.noixdecoco.app.dto.SlackRequestDTO;
+import org.noixdecoco.app.utils.SlackSignatureUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +19,9 @@ public class MainREST {
 
 	@Autowired
 	private CoconutCommandHelper commandHelper;
+
+	@Autowired
+	private SlackSignatureUtil signatureUtil;
 
 	private EvictingQueue<String> treatedEventIds;
 
@@ -35,11 +39,11 @@ public class MainREST {
 	}
 
 	@PostMapping("/event")
-	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody SlackRequestDTO request) {
+	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody SlackRequestDTO request, @RequestBody String bodyString) {
 		LOGGER.info("Headers: " + headers.toString());
 		if(request.getChallenge() != null) {
 			LOGGER.info("Getting challenged:" + request.getChallenge());
-		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEventId())) {
+		} else if(request.getEvent() != null && !treatedEventIds.contains(request.getEventId()) && signatureUtil.signatureIsValid(headers, bodyString)) {
 			// Add eventId to treatedEventIds to prevent reprocessing
 			treatedEventIds.add(request.getEventId());
 			LOGGER.info(request.toString());
