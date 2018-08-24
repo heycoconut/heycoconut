@@ -1,8 +1,10 @@
 package org.noixdecoco.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 // The structure of Slack's message request
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class MessageDTO {
 	private String text;
 	private String channel;
