@@ -1,5 +1,6 @@
 package org.noixdecoco.app.rest;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.common.collect.EvictingQueue;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -39,7 +40,15 @@ public class MainREST {
 	}
 
 	@PostMapping("/event")
-	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody SlackRequestDTO request, @RequestBody String bodyString) {
+	public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody String bodyString) {
+		SlackRequestDTO request = null;
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			request = mapper.readValue(bodyString, SlackRequestDTO.class);
+		} catch (Exception e) {
+			LOGGER.error("Failed to map request to SlackRequestDTO");
+		}
+		System.out.println("slackRequestDTO = " + request);
 		LOGGER.info("Headers: " + headers.toString());
 		if(request.getChallenge() != null) {
 			LOGGER.info("Getting challenged:" + request.getChallenge());
