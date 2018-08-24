@@ -1,6 +1,9 @@
 package org.noixdecoco.app.utils;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.noixdecoco.app.rest.MainREST;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -11,15 +14,18 @@ import javax.crypto.spec.SecretKeySpec;
 @Service
 public class SlackSignatureUtil {
 
+    private static final Logger LOGGER = LogManager.getLogger(SlackSignatureUtil.class);
+
     @Value("${bot.signing.secret}")
     private String signingSecret;
 
     public boolean signatureIsValid(HttpHeaders headers, String data) {
         String requestTimestamp = headers.get("X-Slack-Request-Timestamp").get(0);
         String requestSignature = headers.get("X-Slack-Signature").get(0);
-        System.out.println("requestSignature = " + requestSignature);
-        System.out.println("requestTimestamp = " + requestTimestamp);
-        System.out.println("data = [" + data + "]");
+        LOGGER.info("requestSignature = " + requestSignature);
+        LOGGER.info("requestTimestamp = " + requestTimestamp);
+        LOGGER.info("data = [" + data + "]");
+        LOGGER.info("signingSecret = " + signingSecret);
         return true;
     }
 
