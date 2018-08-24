@@ -26,7 +26,15 @@ public class SlackSignatureUtil {
         LOGGER.info("requestTimestamp = " + requestTimestamp);
         LOGGER.info("data = [" + data + "]");
         LOGGER.info("signingSecret = " + signingSecret);
-        return true;
+        String fullEncryptData = "v0:" + requestTimestamp + ":" + data;
+        try {
+            String encode = encode(fullEncryptData);
+            System.out.println("encode = " + encode);
+            System.out.println("requestSignature = " + requestSignature);
+            return encode == requestSignature;
+        } catch (Exception e) {
+            return false;
+        }
     }
 
     private String encode(String data) throws Exception {
