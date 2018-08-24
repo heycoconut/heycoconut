@@ -28,7 +28,7 @@ public class SlackSignatureUtil {
         LOGGER.info("signingSecret = " + signingSecret);
         String fullEncryptData = "v0:" + requestTimestamp + ":" + data;
         try {
-            String encode = encode(fullEncryptData);
+            String encode = "v0=" + encode(fullEncryptData);
             System.out.println("encode = " + encode);
             System.out.println("requestSignature = " + requestSignature);
             return encode.equals(requestSignature);
