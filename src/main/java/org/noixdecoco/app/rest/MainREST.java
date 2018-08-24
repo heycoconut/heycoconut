@@ -47,7 +47,7 @@ public class MainREST {
 			System.out.println(" bodyString = [" + bodyString + "]");
 			request = mapper.readValue(bodyString, SlackRequestDTO.class);
 		} catch (Exception e) {
-			LOGGER.error("Failed to map request to SlackRequestDTO");
+			LOGGER.error("Failed to map request to SlackRequestDTO", e);
 		}
 		System.out.println("slackRequestDTO = " + request);
 		LOGGER.info("Headers: " + headers.toString());
