@@ -44,6 +44,7 @@ public class MainREST {
 		SlackRequestDTO request = null;
 		try {
 			ObjectMapper mapper = new ObjectMapper();
+			System.out.println(" bodyString = [" + bodyString + "]");
 			request = mapper.readValue(bodyString, SlackRequestDTO.class);
 		} catch (Exception e) {
 			LOGGER.error("Failed to map request to SlackRequestDTO");
