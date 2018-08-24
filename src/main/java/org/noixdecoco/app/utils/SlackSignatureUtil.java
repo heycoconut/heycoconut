@@ -1,9 +1,9 @@
 package org.noixdecoco.app.utils;
 
+import org.apache.commons.codec.binary.Hex;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.tomcat.util.codec.binary.Base64;
-import org.noixdecoco.app.rest.MainREST;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
@@ -31,7 +31,7 @@ public class SlackSignatureUtil {
             String encode = encode(fullEncryptData);
             System.out.println("encode = " + encode);
             System.out.println("requestSignature = " + requestSignature);
-            return encode == requestSignature;
+            return encode.equals(requestSignature);
         } catch (Exception e) {
             return false;
         }
@@ -42,6 +42,6 @@ public class SlackSignatureUtil {
         SecretKeySpec secret_key = new SecretKeySpec(signingSecret.getBytes("UTF-8"), "HmacSHA256");
         sha256_HMAC.init(secret_key);
 
-        return Base64.encodeBase64String(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
+        return Hex.encodeHexString(sha256_HMAC.doFinal(data.getBytes("UTF-8")));
     }
 }
