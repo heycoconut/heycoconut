@@ -10,7 +10,7 @@ server.port: ${PORT}
 bot:
   key: ${SLACK_BOT_KEY}
   auth.token: ${SLACK_BOT_TOKEN}
-  signing.secret: e10dcabc83fb26915b4921e2d2ffdbcc
+  signing.secret: ${SLACK_SIGNING_SECRET}
 daily.coconut.limit: ${DAILY_COCONUT_LIMIT:5}
 tutorial.message: >
   Thank you for using HeyCoconut! To give a coconut, simply tag one or more users and add the number of coconut emojis you wish to give each of them.
