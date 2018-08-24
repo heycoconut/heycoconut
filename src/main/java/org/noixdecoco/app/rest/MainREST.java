@@ -63,7 +63,7 @@ public class MainREST {
 		return Flux.just(request);
 	}
 
-	private SlackRequestDTO extractRequestFromBody(String body) throws {
+	private SlackRequestDTO extractRequestFromBody(String body) {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			return mapper.readValue(body, SlackRequestDTO.class);
