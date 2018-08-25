@@ -1,7 +1,9 @@
 package org.noixdecoco.app.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EventDTO {
 	
 	private String type;
