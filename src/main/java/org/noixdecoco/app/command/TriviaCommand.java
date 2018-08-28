@@ -16,7 +16,7 @@ public class TriviaCommand extends CoconutCommand {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TriviaCommand.class);
 
-    @Value("#{${coconut.facts}.split('+')}")
+    @Value("#{'${coconut.facts}'.split('+')}")
     private List<String> coconutFacts;
 
     private String channel;
