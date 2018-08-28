@@ -16,4 +16,13 @@ public enum EventType {
     public String getValue() {
         return value;
     }
+
+    public static EventType fromString(String value) {
+        for (EventType type : EventType.values()) {
+            if (type.getValue().equals(value)) {
+                return type;
+            }
+        }
+        return null;
+    }
 }

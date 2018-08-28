@@ -68,7 +68,7 @@ public class CoconutCommandManager {
     public CoconutCommand buildFromRequest(SlackRequestDTO request) {
         CoconutCommand command = null;
         if (request != null && request.getEvent() != null) {
-            Map<Predicate<SlackRequestDTO>, Method> commands = ALL_COMMANDS.get(EventType.valueOf(request.getEvent().getType()));
+            Map<Predicate<SlackRequestDTO>, Method> commands = ALL_COMMANDS.get(EventType.fromString(request.getEvent().getType()));
             for (Map.Entry<Predicate<SlackRequestDTO>, Method> entry : commands.entrySet()) {
                 if (entry.getKey().test(request)) {
                     try {
