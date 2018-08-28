@@ -1,4 +1,16 @@
 # Need to define all these env variables
+
+management:
+ endpoints:
+  web:
+   exposure:
+    include: "health,httptrace,metrics"
+    #include: "*"
+   base-path: /
+ endpoint:
+   health:
+    show-details: always
+
 spring.data.mongodb:
   host: ${MONGO_HOST}
   port: ${MONGO_PORT}
