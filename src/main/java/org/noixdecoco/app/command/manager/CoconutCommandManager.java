@@ -72,7 +72,7 @@ public class CoconutCommandManager {
             for (Map.Entry<Predicate<SlackRequestDTO>, Method> entry : commands.entrySet()) {
                 if (entry.getKey().test(request)) {
                     try {
-                        command = (CoconutCommand) entry.getValue().invoke(request);
+                        command = (CoconutCommand) entry.getValue().invoke(null, request);
                         beanFactory.autowireBean(command);
                         break;
                     } catch (IllegalAccessException | InvocationTargetException e) {
