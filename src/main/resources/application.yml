@@ -1,15 +1,15 @@
 # Need to define all these env variables
 
 management:
- endpoints:
-  web:
-   exposure:
-    include: "health,httptrace,metrics"
-    #include: "*"
-   base-path: /
- endpoint:
-   health:
-    show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "health,httptrace,metrics"
+        #include: "*"
+      base-path: /
+  endpoint:
+    health:
+      show-details: always
 
 spring.data.mongodb:
   host: ${MONGO_HOST}
@@ -38,5 +38,4 @@ coconut.facts: >
   Falling coconuts kill 150 people every year – 10 times the number of people killed by sharks.,
   May 8th is National Coconut Creme Pie Day.,
   The average coconut contains about 354 calories. It's easier to eat if you remove the shell.,
-  A coconut is a sphere,
   It is dangerous to karate chop a coconut. You could break your hand, or even worse - the coconut!

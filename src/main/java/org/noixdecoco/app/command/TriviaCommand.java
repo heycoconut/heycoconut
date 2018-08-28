@@ -3,16 +3,21 @@ package org.noixdecoco.app.command;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
 @Command(EventType.APP_MENTION)
 public class TriviaCommand extends CoconutCommand {
 
-    @Value("${coconut.facts}")
-    private String[] coconutFacts;
+    private static final Logger LOGGER = LoggerFactory.getLogger(TriviaCommand.class);
+
+    @Value("#{${coconut.facts}.split('+')}")
+    private List<String> coconutFacts;
 
     private String channel;
 
@@ -43,10 +48,10 @@ public class TriviaCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        if (coconutFacts == null || coconutFacts.length == 0) {
+        if (coconutFacts == null || coconutFacts.isEmpty()) {
             speechService.sendMessage(channel, "I sure wish I knew some random facts about coconuts!");
         } else {
-            speechService.sendMessage(channel, coconutFacts[random.nextInt(coconutFacts.length)]);
+            speechService.sendMessage(channel, coconutFacts.get(random.nextInt(coconutFacts.size())));
         }
     }
 }
