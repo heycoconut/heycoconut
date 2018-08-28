@@ -22,13 +22,17 @@ public abstract class CoconutCommand {
     @Autowired
     protected CoconutLedgerRepository ledgerRepo;
 
+    protected CoconutCommand() {
+    }
+
     public void execute() {
         LOGGER.debug("Executing " + this.getClass().getName());
-        if(validate()) {
+        if (validate()) {
             performAction();
         }
     }
 
     protected abstract boolean validate();
+
     protected abstract void performAction();
 }

@@ -9,10 +9,22 @@ server.error.whitelabel.enabled: false
 server.port: ${PORT}
 bot:
   key: ${SLACK_BOT_KEY}
-  auth.token: ${SLACK_BOT_TOKEN}
-  signing.secret: ${SLACK_SIGNING_SECRET}
+  auth.token: ${SLACK_BOT_TOKEN:""}
+  signing.secret: ${SLACK_SIGNING_SECRET:""}
 daily.coconut.limit: ${DAILY_COCONUT_LIMIT:5}
 tutorial.message: >
   Thank you for using HeyCoconut! To give a coconut, simply tag one or more users and add the number of coconut emojis you wish to give each of them.
   You can also add a coconut reaction on someone's message to give them one. You can only give a maximum of *${DAILY_COCONUT_LIMIT:5}* coconuts per day.
   You can always ask for help by tagging me and saying *help*, or if you want to see the leaderboards, you can tag me and say *leaderboard*+
+coconut.facts:
+- Because of their water resistance, coconuts were able to stay afloat over the ocean.
+- Coconut oils contain MCT’s, a median chain triglycerides which are easy to digest.  The oil is source of energy and has an accelerating effect on the metabolism. Coconut oils are very healthy and good for your heart.
+- Coconut oils also contain four growth hormones, called cytokinins, and three sets of chromosomes – or triploids – that help the development of many organisms.  Coconut water is considered the “father of modern tissue culture science”. Currently, research is being done to see if coconut can be used in hair regrowth and anti-aging cosmetics.
+- During the Pacific War of 1941-45, coconut water was used to give emergency plasma transfusions to wounded soldiers.
+- Coconut oil was the world’s leading vegetable oil until soybean oil took over in the 1960’s.
+- There are more than 20 billion coconuts produced each year.
+- Falling coconuts kill 150 people every year – 10 times the number of people killed by sharks.
+- May 8th is National Coconut Creme Pie Day.
+- The average coconut contains about 354 calories. It's easier to eat if you remove the shell.
+- A coconut is a sphere
+- It is dangerous to karate chop a coconut. You could break your hand, or even worse - the coconut!
