@@ -35,12 +35,6 @@ public class MainREST {
         treatedEventIds = EvictingQueue.create(EVENT_ID_QUEUE_SIZE);
     }
 
-    @RequestMapping("/health")
-    public String health() {
-        LOGGER.info("Health check....");
-        return "Healthy as can be";
-    }
-
     @PostMapping("/event")
     public synchronized Flux<SlackRequestDTO> receiveEvent(@RequestHeader HttpHeaders headers, @RequestBody String bodyString, HttpServletResponse response) {
         SlackRequestDTO request = extractRequestFromBody(bodyString);
