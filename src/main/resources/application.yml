@@ -1,15 +1,15 @@
 # Need to define all these env variables
 
 management:
- endpoints:
-  web:
-   exposure:
-    include: "health,httptrace,metrics"
-    #include: "*"
-   base-path: /
- endpoint:
-   health:
-    show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "health,httptrace,metrics"
+        #include: "*"
+      base-path: /
+  endpoint:
+    health:
+      show-details: always
 
 spring.data.mongodb:
   host: ${MONGO_HOST}
@@ -27,4 +27,27 @@ daily.coconut.limit: ${DAILY_COCONUT_LIMIT:5}
 tutorial.message: >
   Thank you for using HeyCoconut! To give a coconut, simply tag one or more users and add the number of coconut emojis you wish to give each of them.
   You can also add a coconut reaction on someone's message to give them one. You can only give a maximum of *${DAILY_COCONUT_LIMIT:5}* coconuts per day.
-  You can always ask for help by tagging me and saying *help*, or if you want to see the leaderboards, you can tag me and say *leaderboard*+
+  You can always ask for help by tagging me and saying *help*, or if you want to see the leaderboards, you can tag me and say *leaderboard*. Other commands include
+  *trivia*, 
+coconut.facts:
+  - Because of their water resistance, coconuts were able to stay afloat over the ocean.
+  - Coconut oils contain MCT’s, a median chain triglycerides which are easy to digest.  The oil is source of energy and has an accelerating effect on the metabolism. Coconut oils are very healthy and good for your heart.
+  - Coconut oils also contain four growth hormones, called cytokinins, and three sets of chromosomes – or triploids – that help the development of many organisms.  Coconut water is considered the “father of modern tissue culture science”. Currently, research is being done to see if coconut can be used in hair regrowth and anti-aging cosmetics.
+  - During the Pacific War of 1941-45, coconut water was used to give emergency plasma transfusions to wounded soldiers.
+  - Coconut oil was the world’s leading vegetable oil until soybean oil took over in the 1960’s.
+  - There are more than 20 billion coconuts produced each year.
+  - Falling coconuts kill 150 people every year – 10 times the number of people killed by sharks.
+  - May 8th is National Coconut Creme Pie Day.
+  - The average coconut contains about 354 calories. It's easier to eat if you remove the shell.
+  - It is dangerous to karate chop a coconut. You could break your hand, or even worse - the coconut!
+  - Wood from the trunk of the coconut palm was traditionally used to build bridges, houses, huts and boats in the tropics. The woods straightness, strength, and salt resistance made it a reliable building material.
+  - Coconut milk is not the same as coconut water. Coconut milk has a high fat content of around 17%, but is low in sugars. It is frequently added to curries and other savoury dishes. Coconut cream can also be created from the milk.
+  - Technically the coconut fruit is a drupe not a nut. Typical drupes include peaches, plums, and cherries.
+  - The coconut comes from the coconut palm tree which grows throughout the tropics and subtropics.
+  - At full capacity, the coconut palm bears fruit for 15 to 60 years, but under ideal conditions fruit production can last for up to 80 years. The maximum age of the coconut palm is between 100 and 120 years.
+  - Coconuts are good fuel for the body, but did you know that it’s also a planet-friendly fuel for machinery? Biodiesel has been making the rounds as a fossil fuel alternative, and coconut trees happen to be one of the plants that can produce oil in workable quantities.
+  - There are over 1,300 types of coconut, which can all be traced back to one of two genetic origins from either the Pacific or the Indian Ocean.
+  - No beach vacation is complete without a refreshing coconut drink to help you kick back and relax. In the Philippines, sap from an unopened coconut flower is distilled into a potent drink called lambanog.
+  - Aside from their culinary purposes, coconuts are also used for cosmetic purposes and as a mosquito repellent (burning the husk).
+  - Coconuts are loaded with naturally sterile electrolytes, which feed your pH and muscle function
+  - Coconuts offer high levels of manganese, potassium, and phosphorus.
