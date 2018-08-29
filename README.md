@@ -11,6 +11,15 @@ Once the app is installed in your workspace, invite the boy into a channel by ta
 
 You can also tag multiple people to give to more than one person at a time. Heycoconut will also DM the person giving the coconuts to let them know how many coconuts they have left.
 
+## Slack Request Validation
+There are a couple of features implemented to avoid people "spoofing" the requests, or replaying requests multiple times. The first and most basic validation
+keeps track of the last event id's processed, and will avoid re-processing any request that was already processed.
+
+The second and most secure way is to use slack's signing secret to validate the signature in the request header. To do this
+we re-encrypt the signature by appending the timestamp with the data and encrypting using the slack signing secret given
+when registering a bot in a workspace. If this generated signature matches the one sent in the request header, then the request
+is determined to be valid.
+
 ## Requirements
  - Mongodb server
     - You need to specify these environment variables for the app to connect to the database
