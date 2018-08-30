@@ -2,7 +2,9 @@ package org.noixdecoco.app.service.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.noixdecoco.app.data.model.CoconutJournal;
 import org.noixdecoco.app.data.model.CoconutLedger;
+import org.noixdecoco.app.data.repository.CoconutJournalRepository;
 import org.noixdecoco.app.data.repository.CoconutLedgerRepository;
 import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
@@ -24,6 +26,9 @@ public class CoconutServiceImpl implements CoconutService {
 	
 	@Autowired
 	private CoconutLedgerRepository coconutRepo;
+
+	@Autowired
+	private CoconutJournalRepository coconutJournalRepo;
 	
 	@Value("${daily.coconut.limit}")
 	private long dailyLimit;
@@ -55,7 +60,10 @@ public class CoconutServiceImpl implements CoconutService {
 		}
 		
 		giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);
-		giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
+		LocalDateTime now = LocalDateTime.now();
+		giversLedger.setLastCoconutGivenAt(now);
+		recordTransaction(fromUser, toUser, numCoconuts, now);
+
 		coconutRepo.save(giversLedger).subscribe();
 		
 		List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
@@ -88,5 +96,13 @@ public class CoconutServiceImpl implements CoconutService {
 		return dailyLimit;
 	}
 
+	public void recordTransaction(String username, String recipient, int numCoconuts, LocalDateTime date){
+		CoconutJournal journal = CoconutJournal.createNew();
+		journal.setUsername(username);
+		journal.setRecipient(recipient);
+		journal.setCoconutsGiven(Long.valueOf(numCoconuts));
+		journal.setCoconutGivenAt(date);
+		coconutJournalRepo.save(journal).subscribe();
+	}
 	
 }
