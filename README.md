@@ -11,6 +11,18 @@ Once the app is installed in your workspace, invite the boy into a channel by ta
 
 You can also tag multiple people to give to more than one person at a time. Heycoconut will also DM the person giving the coconuts to let them know how many coconuts they have left.
 
+- You can add a reaction to a post to give someone a coconut without the need to type anything.
+
+![image](https://user-images.githubusercontent.com/14881741/44824034-81dc1980-abd1-11e8-9994-4551a7193f75.png)
+
+- You can ask HeyCoconut for a random fact by tagging the bot and saying trivia
+
+![image](https://user-images.githubusercontent.com/14881741/44823873-cc10cb00-abd0-11e8-9deb-03a6ca3bdaaa.png)
+
+- You can ask HeyCoconut for the leaderboard stats
+
+![image](https://user-images.githubusercontent.com/14881741/44823924-ffebf080-abd0-11e8-8b92-e5ef62135007.png)
+
 ## Slack Request Validation
 There are a couple of features implemented to avoid people "spoofing" the requests, or replaying requests multiple times. The first and most basic validation
 keeps track of the last event id's processed, and will avoid re-processing any request that was already processed.
