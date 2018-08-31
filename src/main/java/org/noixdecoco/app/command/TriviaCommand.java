@@ -29,12 +29,7 @@ public class TriviaCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return request -> {
-            if (request.getEvent().getText().contains("trivia")) {
-                return true;
-            }
-            return false;
-        };
+        return r -> r.getEvent().getText().contains("trivia");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
@@ -49,6 +44,7 @@ public class TriviaCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         if (coconutFacts == null || coconutFacts.getFacts() == null) {
+            LOGGER.warn("No facts were loaded. Consider adding some in application.yml");
             speechService.sendMessage(channel, "I sure wish I knew some random facts about coconuts!");
         } else {
             speechService.sendMessage(channel, coconutFacts.getFacts().get(random.nextInt(coconutFacts.getFacts().size())));

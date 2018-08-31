@@ -19,13 +19,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return (request) -> {
-            String message = request.getEvent().getText();
-            if (message != null && message.contains("leaderboard")) {
-                return true;
-            }
-            return false;
-        };
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("leaderboard");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {

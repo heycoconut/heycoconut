@@ -23,7 +23,6 @@ public class GreetingCommand extends CoconutCommand {
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        // TODO: Greet new users only once. Currently the user gets greeted in all channels they join
         return new GreetingCommand(request.getEvent().getUser(), request.getEvent().getChannel());
     }
 

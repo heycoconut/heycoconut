@@ -17,12 +17,7 @@ public class CoconutReactionCommand extends GiveCoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return request -> {
-            if (request.getEvent().getReaction().equalsIgnoreCase("coconut") && request.getEvent().getItemUser() != null) {
-                return true;
-            }
-            return false;
-        };
+        return r -> r.getEvent().getReaction().equalsIgnoreCase("coconut") && r.getEvent().getItemUser() != null;
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {

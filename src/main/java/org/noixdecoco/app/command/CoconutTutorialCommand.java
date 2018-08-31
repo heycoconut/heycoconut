@@ -20,7 +20,7 @@ public class CoconutTutorialCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return (request) -> {
+        return request -> {
             if (request.getEvent() != null && EventType.APP_MENTION.getValue().equals(request.getEvent().getType())) {
                 String message = request.getEvent().getText();
                 if (message != null && message.contains("help")) {
