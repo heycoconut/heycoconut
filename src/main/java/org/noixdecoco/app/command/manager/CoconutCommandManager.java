@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Predicate;
@@ -32,7 +33,7 @@ public class CoconutCommandManager {
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
 
-    private static final Map<EventType, Map<Predicate<SlackRequestDTO>, Method>> ALL_COMMANDS = new HashMap<>();
+    private static final Map<EventType, Map<Predicate<SlackRequestDTO>, Method>> ALL_COMMANDS = new EnumMap(EventType.class);
 
     @PostConstruct
     private void initialiseCommands() {
@@ -59,9 +60,7 @@ public class CoconutCommandManager {
     }
 
     public static void registerCommand(EventType event, Predicate<SlackRequestDTO> predicate, Method commandBuilderMethod) {
-        if (ALL_COMMANDS.get(event) == null) {
-            ALL_COMMANDS.put(event, new HashMap<>());
-        }
+        ALL_COMMANDS.computeIfAbsent(event, k -> new HashMap<>());
         ALL_COMMANDS.get(event).put(predicate, commandBuilderMethod);
     }
 

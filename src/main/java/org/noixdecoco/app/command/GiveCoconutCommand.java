@@ -44,7 +44,6 @@ public class GiveCoconutCommand extends CoconutCommand {
 
     public static CoconutCommand build(SlackRequestDTO request) {
         int coconutsToGive = extractNumberOfCoconuts(request.getEvent().getText());
-        String giver = request.getEvent().getUser();
         Set<String> receivers = extractTaggedUsers(request.getEvent().getText());
         return new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
     }
