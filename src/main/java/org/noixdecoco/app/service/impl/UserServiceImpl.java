@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
-    @Value("admin.users")
+    @Value("${admin.users}")
     private String[] adminList;
 
     @Override
