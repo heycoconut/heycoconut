@@ -18,8 +18,7 @@ public class GreetingCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        // TODO: Greet new users only once. Currently the user gets greeted in all channels they join
-        return request -> true;
+        return r -> true;
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
@@ -28,7 +27,10 @@ public class GreetingCommand extends CoconutCommand {
 
     @Override
     protected boolean validate() {
-        return user != null && channel != null;
+        if (user != null && channel != null) {
+            return slackService.getChannelInfo(channel).getGeneral();
+        }
+        return false;
     }
 
     @Override
