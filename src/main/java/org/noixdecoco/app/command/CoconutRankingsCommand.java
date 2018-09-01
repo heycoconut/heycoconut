@@ -36,7 +36,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
         Sort sort = new Sort(Sort.Direction.DESC, "numberOfCoconuts");
         List<CoconutLedger> topTen = ledgerRepo.findAll(sort).buffer(10).blockFirst();
 
-        speechService.sendMessage(channel, composeLeaderboard(topTen));
+        slackService.sendMessage(channel, composeLeaderboard(topTen));
     }
 
     private String composeLeaderboard(List<CoconutLedger> topLedgers) {

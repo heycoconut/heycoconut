@@ -6,24 +6,23 @@ import org.noixdecoco.app.dto.SlackRequestDTO;
 
 import java.util.function.Predicate;
 
-@Command(EventType.MEMBER_JOINED_CHANNEL)
-public class GreetingCommand extends CoconutCommand {
+@Command(EventType.APP_MENTION)
+public class IsUserAdminCommand extends CoconutCommand {
 
     private String user;
     private String channel;
 
-    private GreetingCommand(String user, String channel) {
+    private IsUserAdminCommand(String user, String channel) {
         this.user = user;
         this.channel = channel;
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        // TODO: Greet new users only once. Currently the user gets greeted in all channels they join
-        return request -> true;
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().toLowerCase().contains("am i admin");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new GreetingCommand(request.getEvent().getUser(), request.getEvent().getChannel());
+        return new IsUserAdminCommand(request.getEvent().getUser(), request.getEvent().getChannel());
     }
 
     @Override
@@ -33,6 +32,10 @@ public class GreetingCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        slackService.sendMessage(channel, "Welcome, <@" + user + ">! If you want to know how I work, simply ask me for help by tagging my name and saying *'help'*");
+        if (userService.isAdmin(user)) {
+            slackService.sendMessage(channel, "Yes m'lord, at your service", false);
+        } else {
+            slackService.sendMessage(channel, "Unfortunately not young lad", false);
+        }
     }
 }

@@ -4,7 +4,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.data.repository.CoconutLedgerRepository;
 import org.noixdecoco.app.service.CoconutService;
-import org.noixdecoco.app.service.SpeechService;
+import org.noixdecoco.app.service.SlackService;
+import org.noixdecoco.app.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +18,10 @@ public abstract class CoconutCommand {
     protected CoconutService coconutService;
 
     @Autowired
-    protected SpeechService speechService;
+    protected SlackService slackService;
+
+    @Autowired
+    protected UserService userService;
 
     @Autowired
     protected CoconutLedgerRepository ledgerRepo;

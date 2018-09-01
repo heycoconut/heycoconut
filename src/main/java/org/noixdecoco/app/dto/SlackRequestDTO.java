@@ -4,58 +4,58 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class SlackRequestDTO {
-	
-	private String token;
-	private String challenge;
-	private String type;
-	private EventDTO event;
+public class SlackRequestDTO implements SlackDTO {
 
-	@JsonProperty("event_id")
-	private String eventId;
+    private String token;
+    private String challenge;
+    private String type;
+    private EventDTO event;
 
-	public String getToken() {
-		return token;
-	}
+    @JsonProperty("event_id")
+    private String eventId;
 
-	public void setToken(String token) {
-		this.token = token;
-	}
+    public String getToken() {
+        return token;
+    }
 
-	public String getChallenge() {
-		return challenge;
-	}
+    public void setToken(String token) {
+        this.token = token;
+    }
 
-	public void setChallenge(String challenge) {
-		this.challenge = challenge;
-	}
+    public String getChallenge() {
+        return challenge;
+    }
 
-	public String getType() {
-		return type;
-	}
+    public void setChallenge(String challenge) {
+        this.challenge = challenge;
+    }
 
-	public void setType(String type) {
-		this.type = type;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public EventDTO getEvent() {
-		return event;
-	}
+    public void setType(String type) {
+        this.type = type;
+    }
 
-	public void setEvent(EventDTO event) {
-		this.event = event;
-	}
+    public EventDTO getEvent() {
+        return event;
+    }
 
-	public String getEventId() {
-		return eventId;
-	}
+    public void setEvent(EventDTO event) {
+        this.event = event;
+    }
 
-	public void setEventId(String eventId) {
-		this.eventId = eventId;
-	}
+    public String getEventId() {
+        return eventId;
+    }
 
-	@Override
-	public String toString() {
-		return "Event_id=" + eventId + ": " + event.toString();
-	}
+    public void setEventId(String eventId) {
+        this.eventId = eventId;
+    }
+
+    @Override
+    public String toString() {
+        return "Event_id=" + eventId + ": " + event.toString();
+    }
 }

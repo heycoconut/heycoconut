@@ -6,6 +6,7 @@ import org.noixdecoco.app.data.repository.CoconutJournalRepository;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -53,21 +54,21 @@ public class WeeklyCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start,end).buffer(10).blockFirst();
+        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start, end).buffer(10).blockFirst();
 
         if (weekStats != null) {
-            speechService.sendMessage(channel, composeStats(weekStats));
+            slackService.sendMessage(channel, composeStats(weekStats));
         } else {
-            speechService.sendMessage(channel, "No weekly summary from " + startFormatted + " to " + endFormatted);
+            slackService.sendMessage(channel, "No weekly summary from " + startFormatted + " to " + endFormatted);
         }
     }
 
     private String composeStats(List<CoconutJournal> journals) {
         StringBuilder builder = new StringBuilder();
-        builder.append("*Weekly Summary*:chart_with_upward_trend:\n"+ startFormatted + " to " + endFormatted +"\n\n");
+        builder.append("*Weekly Summary*:chart_with_upward_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
 
-        Map<String,Long> givers = new HashMap<>();
-        Map<String,Long> recipients = new HashMap<>();
+        Map<String, Long> givers = new HashMap<>();
+        Map<String, Long> recipients = new HashMap<>();
 
         builder.append("*Givers*\n\n");
         for (CoconutJournal journal : journals) {
@@ -91,13 +92,13 @@ public class WeeklyCommand extends CoconutCommand {
             }
         }
 
-        for (String giver : givers.keySet()){
+        for (String giver : givers.keySet()) {
             int currentRank = 1;
             builder.append(currentRank++).append(". <@").append(giver).append(">: ").append(givers.get(giver)).append("\n");
         }
 
         builder.append("\n*recipients*\n\n");
-        for (String recipient : recipients.keySet()){
+        for (String recipient : recipients.keySet()) {
             int currentRank = 1;
             builder.append(currentRank++).append(". <@").append(recipient).append(">: ").append(recipients.get(recipient)).append("\n");
         }

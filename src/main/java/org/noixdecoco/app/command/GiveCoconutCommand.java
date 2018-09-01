@@ -87,10 +87,10 @@ public class GiveCoconutCommand extends CoconutCommand {
                 responseMessage.append("Something went wrong. :sad:");
             }
         }
-        speechService.sendMessage(channel, responseMessage.toString());
+        slackService.sendMessage(channel, responseMessage.toString());
 
         long coconutsRemaining = coconutService.getCoconutsRemaining(giver);
-        speechService.sendMessage(giver, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
+        slackService.sendMessage(giver, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
     }
 
 

@@ -42,6 +42,6 @@ public class CoconutTutorialCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        speechService.sendMessage(channel, tutorialMessage);
+        slackService.sendMessage(channel, tutorialMessage);
     }
 }
