@@ -17,4 +17,8 @@ public enum SlackAction {
     public String getKey() {
         return key;
     }
+
+    public String toString() {
+        return key;
+    }
 }
