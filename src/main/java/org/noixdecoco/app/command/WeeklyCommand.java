@@ -98,7 +98,7 @@ public class WeeklyCommand extends CoconutCommand {
             builder.append(currentRank++).append(". <@").append(giver).append(">: ").append(givers.get(giver)).append("\n");
         }
 
-        builder.append("\n*recipients*\n\n");
+        builder.append("\n*Recipients*\n\n");
         for (String recipient : recipients.keySet()) {
             int currentRank = 1;
             builder.append(currentRank++).append(". <@").append(recipient).append(">: ").append(recipients.get(recipient)).append("\n");
