@@ -12,7 +12,6 @@ import java.util.function.Predicate;
 @Command(value = EventType.MESSAGE, adminOnly = true)
 public class StealCoconutCommand extends CoconutCommand {
 
-    protected String giver;
     protected Set<String> receivers;
     protected int coconutCount;
     protected String channel;
@@ -21,7 +20,7 @@ public class StealCoconutCommand extends CoconutCommand {
     protected static final String TAG_START = "<@";
 
     protected StealCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
-        this.giver = giver;
+        super(giver);
         this.receivers = receivers;
         this.channel = channel;
         this.coconutCount = coconutCount;
@@ -64,7 +63,7 @@ public class StealCoconutCommand extends CoconutCommand {
 
     @Override
     protected boolean validate() {
-        return giver != null && receivers != null && !receivers.isEmpty() && coconutCount > 0;
+        return userId != null && receivers != null && !receivers.isEmpty() && coconutCount > 0;
     }
 
     @Override

@@ -14,7 +14,8 @@ public class CoconutRankingsCommand extends CoconutCommand {
 
     private String channel;
 
-    public CoconutRankingsCommand(String channel) {
+    public CoconutRankingsCommand(String userId, String channel) {
+        super(userId);
         this.channel = channel;
     }
 
@@ -23,7 +24,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new CoconutRankingsCommand(request.getEvent().getChannel());
+        return new CoconutRankingsCommand(request.getEvent().getUser(), request.getEvent().getChannel());
     }
 
     @Override

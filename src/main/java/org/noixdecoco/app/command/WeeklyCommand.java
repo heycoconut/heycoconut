@@ -30,6 +30,7 @@ public class WeeklyCommand extends CoconutCommand {
     protected CoconutJournalRepository journal;
 
     public WeeklyCommand(String channel) {
+        super(null);
         this.channel = channel;
     }
 

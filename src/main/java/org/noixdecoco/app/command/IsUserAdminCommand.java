@@ -9,11 +9,10 @@ import java.util.function.Predicate;
 @Command(EventType.APP_MENTION)
 public class IsUserAdminCommand extends CoconutCommand {
 
-    private String user;
     private String channel;
 
     private IsUserAdminCommand(String user, String channel) {
-        this.user = user;
+        super(user);
         this.channel = channel;
     }
 
@@ -27,12 +26,12 @@ public class IsUserAdminCommand extends CoconutCommand {
 
     @Override
     protected boolean validate() {
-        return user != null && channel != null;
+        return userId != null && channel != null;
     }
 
     @Override
     protected void performAction() {
-        if (userService.isAdmin(user)) {
+        if (userService.isAdmin(userId)) {
             slackService.sendMessage(channel, "Yes m'lord, at your service", false);
         } else {
             slackService.sendMessage(channel, "Unfortunately not young lad", false);

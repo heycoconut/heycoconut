@@ -15,7 +15,6 @@ import java.util.function.Predicate;
 @Command(EventType.MESSAGE)
 public class GiveCoconutCommand extends CoconutCommand {
 
-    protected String giver;
     protected Set<String> receivers;
     protected int coconutCount;
     protected String channel;
@@ -24,7 +23,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected static final String TAG_START = "<@";
 
     protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
-        this.giver = giver;
+        super(giver);
         this.receivers = receivers;
         this.channel = channel;
         this.coconutCount = coconutCount;
@@ -34,7 +33,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal")) {
+                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
                     return true;
                 }
             }
@@ -67,7 +66,7 @@ public class GiveCoconutCommand extends CoconutCommand {
 
     @Override
     protected boolean validate() {
-        return giver != null && receivers != null && !receivers.isEmpty() && coconutCount > 0;
+        return userId != null && receivers != null && !receivers.isEmpty() && coconutCount > 0;
     }
 
     @Override
@@ -75,22 +74,22 @@ public class GiveCoconutCommand extends CoconutCommand {
         StringBuilder responseMessage = new StringBuilder();
         for (String name : receivers) {
             try {
-                long numCoconuts = coconutService.giveCoconut(giver, name, coconutCount);
-                responseMessage.append("<@").append(giver).append("> gave ").append(coconutCount)
+                long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
+                responseMessage.append("<@").append(userId).append("> gave ").append(coconutCount)
                         .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">, ")
                         .append(" they now have ").append(numCoconuts).append(" coconut").append((numCoconuts > 1 ? "s" : "")).append(". ");
             } catch (InsufficientCoconutsException e) {
-                responseMessage.append("<@" + giver + "> didn't have enough coconuts remaining for <@" + name + "> :sob:");
+                responseMessage.append("<@" + userId + "> didn't have enough coconuts remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {
-                responseMessage.append("<@" + giver + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
+                responseMessage.append("<@" + userId + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
             } catch (CoconutException e) {
                 responseMessage.append("Something went wrong. :sad:");
             }
         }
         slackService.sendMessage(channel, responseMessage.toString());
 
-        long coconutsRemaining = coconutService.getCoconutsRemaining(giver);
-        slackService.sendMessage(giver, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
+        long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
+        slackService.sendMessage(userId, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
     }
 
 

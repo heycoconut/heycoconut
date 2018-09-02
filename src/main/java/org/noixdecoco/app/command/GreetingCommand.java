@@ -9,11 +9,10 @@ import java.util.function.Predicate;
 @Command(EventType.MEMBER_JOINED_CHANNEL)
 public class GreetingCommand extends CoconutCommand {
 
-    private String user;
     private String channel;
 
     private GreetingCommand(String user, String channel) {
-        this.user = user;
+        super(user);
         this.channel = channel;
     }
 
@@ -27,7 +26,7 @@ public class GreetingCommand extends CoconutCommand {
 
     @Override
     protected boolean validate() {
-        if (user != null && channel != null) {
+        if (userId != null && channel != null) {
             return slackService.getChannelInfo(channel).getGeneral();
         }
         return false;
@@ -35,6 +34,6 @@ public class GreetingCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        slackService.sendMessage(channel, "Welcome, <@" + user + ">! If you want to know how I work, simply ask me for help by tagging my name and saying *'help'*");
+        slackService.sendMessage(channel, "Welcome, <@" + userId + ">! If you want to know how I work, simply ask me for help by tagging my name and saying *'help'*");
     }
 }

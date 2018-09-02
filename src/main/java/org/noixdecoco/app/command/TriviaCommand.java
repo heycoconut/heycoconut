@@ -23,7 +23,8 @@ public class TriviaCommand extends CoconutCommand {
 
     private Random random;
 
-    private TriviaCommand(String channel) {
+    private TriviaCommand(String user, String channel) {
+        super(user);
         this.channel = channel;
         random = new Random(System.currentTimeMillis());
     }
@@ -33,7 +34,7 @@ public class TriviaCommand extends CoconutCommand {
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new TriviaCommand(request.getEvent().getChannel());
+        return new TriviaCommand(request.getEvent().getUser(), request.getEvent().getChannel());
     }
 
     @Override
