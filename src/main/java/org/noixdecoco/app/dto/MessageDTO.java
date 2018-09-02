@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class MessageDTO implements SlackDTO {
     private String text;
     private String channel;
+    private String user;
 
     @JsonProperty("as_user")
     private Boolean asUser = Boolean.TRUE;
@@ -36,4 +37,11 @@ public class MessageDTO implements SlackDTO {
         this.asUser = asUser;
     }
 
+    public String getUser() {
+        return user;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
 }

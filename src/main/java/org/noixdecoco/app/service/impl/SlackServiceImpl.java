@@ -39,10 +39,13 @@ public class SlackServiceImpl implements SlackService {
     }
 
     @Override
-    public void sendMessage(String channel, String text, boolean ephemeral) {
+    public void sendMessage(String channel, String text, boolean ephemeral, String toUser) {
         MessageDTO message = new MessageDTO();
         message.setChannel(channel);
         message.setText(text);
+        if (ephemeral) {
+            message.setUser(toUser);
+        }
         String response = restTemplate.postForObject(SLACK_API_URL + (ephemeral ? SlackAction.POST_EPHEMERAL : SlackAction.POST_MESSAGE), new HttpEntity(message, createHttpHeaders()), String.class);
         LOGGER.info("Response: " + response);
     }

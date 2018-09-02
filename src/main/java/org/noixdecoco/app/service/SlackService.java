@@ -5,7 +5,7 @@ import org.noixdecoco.app.dto.ChannelDTO;
 public interface SlackService {
     void sendMessage(String channel, String text);
 
-    void sendMessage(String channel, String text, boolean ephemeral);
+    void sendMessage(String channel, String text, boolean ephemeral, String toUser);
 
     ChannelDTO getChannelInfo(String channelId);
 
