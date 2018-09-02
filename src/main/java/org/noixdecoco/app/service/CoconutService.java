@@ -5,7 +5,11 @@ import org.noixdecoco.app.exception.CoconutException;
 import reactor.core.publisher.Flux;
 
 public interface CoconutService {
-	long giveCoconut(String fromUser, String toUser, int numCoconuts) throws CoconutException;
-	Flux<CoconutLedger> getAllLedgers();
-	long getCoconutsRemaining(String user);
+    long giveCoconut(String fromUser, String toUser, int numCoconuts) throws CoconutException;
+
+    void addCoconut(String toUser, int numCoconuts);
+
+    Flux<CoconutLedger> getAllLedgers();
+
+    long getCoconutsRemaining(String user);
 }

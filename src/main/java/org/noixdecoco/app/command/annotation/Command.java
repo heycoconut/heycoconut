@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Command {
     EventType value();
+
+    boolean adminOnly() default false;
 }
