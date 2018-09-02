@@ -66,7 +66,7 @@ public class WeeklyCommand extends CoconutCommand {
 
     private String composeStats(List<CoconutJournal> journals) {
         StringBuilder builder = new StringBuilder();
-        builder.append("*Weekly Summary*:chart_with_upward_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
+        builder.append("*Weekly Summary*:chart_with_upwards_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
 
         Map<String, Long> givers = new HashMap<>();
         Map<String, Long> recipients = new HashMap<>();
