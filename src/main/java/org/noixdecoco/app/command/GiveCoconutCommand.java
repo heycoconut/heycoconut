@@ -76,8 +76,9 @@ public class GiveCoconutCommand extends CoconutCommand {
             try {
                 long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
                 responseMessage.append("<@").append(userId).append("> gave ").append(coconutCount)
-                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">, ")
-                        .append(" they now have ").append(numCoconuts).append(" coconut").append((numCoconuts > 1 ? "s" : "")).append(". ");
+                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">, ");
+
+                slackService.sendMessage(name, "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
             } catch (InsufficientCoconutsException e) {
                 responseMessage.append("<@" + userId + "> didn't have enough coconuts remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {
@@ -89,7 +90,8 @@ public class GiveCoconutCommand extends CoconutCommand {
         slackService.sendMessage(channel, responseMessage.toString());
 
         long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-        slackService.sendMessage(userId, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.");
+        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.", true);
+
     }
 
 
