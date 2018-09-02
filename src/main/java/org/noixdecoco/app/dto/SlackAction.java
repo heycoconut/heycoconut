@@ -18,6 +18,7 @@ public enum SlackAction {
         return key;
     }
 
+    @Override
     public String toString() {
         return key;
     }
