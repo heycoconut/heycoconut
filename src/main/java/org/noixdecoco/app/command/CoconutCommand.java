@@ -30,6 +30,7 @@ public abstract class CoconutCommand {
     protected String userId;
 
     protected CoconutCommand(String userId) {
+        this.userId = userId;
     }
 
     public void execute() {
