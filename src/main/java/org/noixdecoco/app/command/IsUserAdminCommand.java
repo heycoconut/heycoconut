@@ -32,9 +32,9 @@ public class IsUserAdminCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         if (userService.isAdmin(userId)) {
-            slackService.sendMessage(channel, "Yes m'lord, at your service", false);
+            slackService.sendMessage(channel, "Yes m'lord, at your service");
         } else {
-            slackService.sendMessage(channel, "Unfortunately not young lad", false);
+            slackService.sendMessage(channel, "Unfortunately not young lad");
         }
     }
 }

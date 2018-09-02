@@ -90,7 +90,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         slackService.sendMessage(channel, responseMessage.toString());
 
         long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.", true);
+        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.", true, userId);
 
     }
 

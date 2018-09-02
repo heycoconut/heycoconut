@@ -35,7 +35,7 @@ public class SlackServiceImpl implements SlackService {
 
     @Override
     public void sendMessage(String channel, String text) {
-        sendMessage(channel, text, false);
+        sendMessage(channel, text, false, null);
     }
 
     @Override

@@ -46,9 +46,9 @@ public class TriviaCommand extends CoconutCommand {
     protected void performAction() {
         if (coconutFacts == null || coconutFacts.getFacts() == null) {
             LOGGER.warn("No facts were loaded. Consider adding some in application.yml");
-            slackService.sendMessage(channel, "I sure wish I knew some random facts about coconuts!", false);
+            slackService.sendMessage(channel, "I sure wish I knew some random facts about coconuts!");
         } else {
-            slackService.sendMessage(channel, coconutFacts.getFacts().get(random.nextInt(coconutFacts.getFacts().size())), false);
+            slackService.sendMessage(channel, coconutFacts.getFacts().get(random.nextInt(coconutFacts.getFacts().size())));
         }
     }
 }
