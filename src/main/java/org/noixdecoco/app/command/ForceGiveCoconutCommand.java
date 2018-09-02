@@ -72,7 +72,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
         StringBuilder responseMessage = new StringBuilder();
         for (String name : receivers) {
             coconutService.addCoconut(name, coconutCount);
-            responseMessage.append("<@").append(name).append("> has " + (coconutCount > 0 ? "received" : "lost")).append(coconutCount).append(" coconut").append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
+            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" coconut").append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
         }
         slackService.sendMessage(channel, responseMessage.toString());
     }
