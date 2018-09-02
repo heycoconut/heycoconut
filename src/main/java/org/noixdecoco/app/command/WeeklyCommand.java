@@ -10,10 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Predicate;
+
+import static java.util.stream.Collectors.toMap;
 
 @Command(EventType.APP_MENTION)
 public class WeeklyCommand extends CoconutCommand {
@@ -22,7 +22,7 @@ public class WeeklyCommand extends CoconutCommand {
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
     private LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.SUNDAY);
-    private LocalDateTime end = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(0).with(DayOfWeek.SUNDAY);
+    private LocalDateTime end = LocalDateTime.now().withHour(23).withMinute(59).withSecond(59).with(DayOfWeek.SUNDAY);
     private String startFormatted = start.format(formatter);
     private String endFormatted = end.format(formatter);
 
@@ -35,13 +35,7 @@ public class WeeklyCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return (request) -> {
-            String message = request.getEvent().getText();
-            if (message != null && message.contains("weekly")) {
-                return true;
-            }
-            return false;
-        };
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("weekly");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
@@ -55,7 +49,7 @@ public class WeeklyCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start, end).buffer(10).blockFirst();
+        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start, end).buffer().blockFirst();
 
         if (weekStats != null) {
             slackService.sendMessage(channel, composeStats(weekStats));
@@ -70,13 +64,14 @@ public class WeeklyCommand extends CoconutCommand {
 
         Map<String, Long> givers = new HashMap<>();
         Map<String, Long> recipients = new HashMap<>();
+        int count = 1;
 
-        builder.append("*Givers*\n\n");
-        for (CoconutJournal journal : journals) {
+        builder.append("*Top Givers* :heart:\n\n");
+        for (CoconutJournal journalEntry : journals) {
 
-            String user = journal.getUsername();
-            String recipient = journal.getRecipient();
-            Long coconutsGiven = journal.getCoconutsGiven();
+            String user = journalEntry.getUsername();
+            String recipient = journalEntry.getRecipient();
+            Long coconutsGiven = journalEntry.getCoconutsGiven();
 
             // Build givers hashmap
             if (givers.containsKey(user)) {
@@ -93,17 +88,24 @@ public class WeeklyCommand extends CoconutCommand {
             }
         }
 
-        for (String giver : givers.keySet()) {
-            int currentRank = 1;
-            builder.append(currentRank++).append(". <@").append(giver).append(">: ").append(givers.get(giver)).append("\n");
+        for (Map.Entry<String, Long> giver : sortValDesc(givers).entrySet()) {
+            builder.append(count++).append(". <@").append(giver.getKey()).append(">: ").append(giver.getValue()).append("\n");
         }
 
-        builder.append("\n*Recipients*\n\n");
-        for (String recipient : recipients.keySet()) {
-            int currentRank = 1;
-            builder.append(currentRank++).append(". <@").append(recipient).append(">: ").append(recipients.get(recipient)).append("\n");
+        count = 1;
+        builder.append("\n*Top Recipients* :trophy:\n\n");
+        for (Map.Entry<String, Long> recipient : sortValDesc(recipients).entrySet()) {
+            builder.append(count++).append(". <@").append(recipient.getKey()).append(">: ").append(recipient.getValue()).append("\n");
         }
 
         return builder.toString();
+    }
+
+    private Map<String, Long> sortValDesc(Map<String, Long> unsorted) {
+        return unsorted.entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
+                .collect(toMap(Map.Entry::getKey,
+                        Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
     }
 }
