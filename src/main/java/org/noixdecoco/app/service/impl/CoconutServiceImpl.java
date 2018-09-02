@@ -84,9 +84,6 @@ public class CoconutServiceImpl implements CoconutService {
 
     @Override
     public void addCoconut(String toUser, int numCoconuts) {
-        CoconutLedger giversLedger = null;
-        LocalDateTime startOfDay = LocalDate.now().atStartOfDay();
-
         List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
         if (ledgers.isEmpty()) {
             CoconutLedger ledger = CoconutLedger.createNew();
