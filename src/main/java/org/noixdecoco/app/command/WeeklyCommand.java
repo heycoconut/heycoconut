@@ -6,6 +6,7 @@ import org.noixdecoco.app.data.repository.CoconutJournalRepository;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
+
 import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -20,8 +21,8 @@ public class WeeklyCommand extends CoconutCommand {
     private String channel;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.MONDAY);
-    private LocalDateTime end = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.SUNDAY);
+    private LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.SUNDAY);
+    private LocalDateTime end = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(0).with(DayOfWeek.SUNDAY);
     private String startFormatted = start.format(formatter);
     private String endFormatted = end.format(formatter);
 
@@ -29,6 +30,7 @@ public class WeeklyCommand extends CoconutCommand {
     protected CoconutJournalRepository journal;
 
     public WeeklyCommand(String channel) {
+        super(null);
         this.channel = channel;
     }
 
@@ -53,21 +55,21 @@ public class WeeklyCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start,end).buffer(10).blockFirst();
+        List<CoconutJournal> weekStats = journal.findByCoconutGivenAtBetween(start, end).buffer(10).blockFirst();
 
         if (weekStats != null) {
-            speechService.sendMessage(channel, composeStats(weekStats));
+            slackService.sendMessage(channel, composeStats(weekStats));
         } else {
-            speechService.sendMessage(channel, "No weekly summary from " + startFormatted + " to " + endFormatted);
+            slackService.sendMessage(channel, "No weekly summary from " + startFormatted + " to " + endFormatted);
         }
     }
 
     private String composeStats(List<CoconutJournal> journals) {
         StringBuilder builder = new StringBuilder();
-        builder.append("*Weekly Summary*:chart_with_upward_trend:\n"+ startFormatted + " to " + endFormatted +"\n\n");
+        builder.append("*Weekly Summary*:chart_with_upwards_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
 
-        Map<String,Long> givers = new HashMap<>();
-        Map<String,Long> recipients = new HashMap<>();
+        Map<String, Long> givers = new HashMap<>();
+        Map<String, Long> recipients = new HashMap<>();
 
         builder.append("*Givers*\n\n");
         for (CoconutJournal journal : journals) {
@@ -91,13 +93,13 @@ public class WeeklyCommand extends CoconutCommand {
             }
         }
 
-        for (String giver : givers.keySet()){
+        for (String giver : givers.keySet()) {
             int currentRank = 1;
             builder.append(currentRank++).append(". <@").append(giver).append(">: ").append(givers.get(giver)).append("\n");
         }
 
-        builder.append("\n*recipients*\n\n");
-        for (String recipient : recipients.keySet()){
+        builder.append("\n*Recipients*\n\n");
+        for (String recipient : recipients.keySet()) {
             int currentRank = 1;
             builder.append(currentRank++).append(". <@").append(recipient).append(">: ").append(recipients.get(recipient)).append("\n");
         }

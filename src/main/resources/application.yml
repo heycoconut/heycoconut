@@ -11,6 +11,8 @@ management:
     health:
       show-details: always
 
+# Comma separated list of admin users
+admin.users: ${ADMIN_USERS}
 spring.data.mongodb:
   host: ${MONGO_HOST}
   port: ${MONGO_PORT}

@@ -3,7 +3,7 @@ package org.noixdecoco.app.dto;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class ItemDTO {
+public class ItemDTO implements SlackDTO {
 
     private String type;
     private String channel;
@@ -33,6 +33,7 @@ public class ItemDTO {
         this.ts = ts;
     }
 
+    @Override
     public String toString() {
         return "[type: " + type + ", channel: " + channel + "]";
     }

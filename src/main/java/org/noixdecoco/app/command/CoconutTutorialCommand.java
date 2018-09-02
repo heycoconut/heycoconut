@@ -15,7 +15,8 @@ public class CoconutTutorialCommand extends CoconutCommand {
     @Value("${tutorial.message}")
     private String tutorialMessage;
 
-    public CoconutTutorialCommand(String channel) {
+    public CoconutTutorialCommand(String userId, String channel) {
+        super(userId);
         this.channel = channel;
     }
 
@@ -32,7 +33,7 @@ public class CoconutTutorialCommand extends CoconutCommand {
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new CoconutTutorialCommand(request.getEvent().getChannel());
+        return new CoconutTutorialCommand(request.getEvent().getUser(), request.getEvent().getChannel());
     }
 
     @Override
@@ -42,6 +43,6 @@ public class CoconutTutorialCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        speechService.sendMessage(channel, tutorialMessage);
+        slackService.sendMessage(channel, tutorialMessage);
     }
 }

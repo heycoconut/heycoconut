@@ -3,17 +3,14 @@ package org.noixdecoco.app.command;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
-import org.noixdecoco.app.exception.CoconutException;
-import org.noixdecoco.app.exception.InsufficientCoconutsException;
-import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
-@Command(EventType.MESSAGE)
-public class GiveCoconutCommand extends CoconutCommand {
+@Command(value = EventType.MESSAGE, adminOnly = true)
+public class ForceGiveCoconutCommand extends CoconutCommand {
 
     protected Set<String> receivers;
     protected int coconutCount;
@@ -22,7 +19,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected static final String COCONUT_EMOJI = ":coconut:";
     protected static final String TAG_START = "<@";
 
-    protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
+    protected ForceGiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
         super(giver);
         this.receivers = receivers;
         this.channel = channel;
@@ -33,7 +30,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
+                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && text.toLowerCase().contains("sudo ")) {
                     return true;
                 }
             }
@@ -44,7 +41,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     public static CoconutCommand build(SlackRequestDTO request) {
         int coconutsToGive = extractNumberOfCoconuts(request.getEvent().getText());
         Set<String> receivers = extractTaggedUsers(request.getEvent().getText());
-        return new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
+        return new ForceGiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
     }
 
     private static int extractNumberOfCoconuts(String message) {
@@ -73,25 +70,10 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected void performAction() {
         StringBuilder responseMessage = new StringBuilder();
         for (String name : receivers) {
-            try {
-                long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
-                responseMessage.append("<@").append(userId).append("> gave ").append(coconutCount)
-                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">, ");
-
-                slackService.sendMessage(name, "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
-            } catch (InsufficientCoconutsException e) {
-                responseMessage.append("<@" + userId + "> didn't have enough coconuts remaining for <@" + name + "> :sob:");
-            } catch (InvalidReceiverException e) {
-                responseMessage.append("<@" + userId + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
-            } catch (CoconutException e) {
-                responseMessage.append("Something went wrong. :sad:");
-            }
+            coconutService.addCoconut(name, coconutCount);
+            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" coconut").append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
         }
         slackService.sendMessage(channel, responseMessage.toString());
-
-        long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.", true, userId);
-
     }
 
 
