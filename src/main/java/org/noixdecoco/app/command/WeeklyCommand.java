@@ -21,8 +21,8 @@ public class WeeklyCommand extends CoconutCommand {
     private String channel;
 
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.MONDAY);
-    private LocalDateTime end = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.SUNDAY);
+    private LocalDateTime start = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(1).with(DayOfWeek.SUNDAY);
+    private LocalDateTime end = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).minusWeeks(0).with(DayOfWeek.SUNDAY);
     private String startFormatted = start.format(formatter);
     private String endFormatted = end.format(formatter);
 
