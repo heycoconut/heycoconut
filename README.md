@@ -56,3 +56,10 @@ The *predicate* will decide in addition to the EventType linked to your command 
 An example would be to check the text in the message for certain keywords that may trigger your command
 
 By following those steps, your command will be detected at runtime, and be executed by the CoconutCommandManager class at the right moment.
+
+## Slack App Configuration
+
+- Basic Information: Get your signing secret
+- OAuth & Permissions Section: You can get your `OAuth Access Token` and `Bot User OAuth Access Token`
+    - Define these scopes
+- Event Subscriptions: Define your request URL and Subscribe to bot events
