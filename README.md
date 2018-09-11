@@ -59,7 +59,16 @@ By following those steps, your command will be detected at runtime, and be execu
 
 ## Slack App Configuration
 
-- Basic Information: Get your signing secret
-- OAuth & Permissions Section: You can get your `OAuth Access Token` and `Bot User OAuth Access Token`
-    - Define these scopes
-- Event Subscriptions: Define your request URL and Subscribe to bot events
+Get your signing secret from the `Basic Information` section
+![image](https://user-images.githubusercontent.com/9341349/45330809-40366180-b535-11e8-990f-779c1f3ff7c6.png)
+
+You can get your `OAuth Access Token` and `Bot User OAuth Access Token` in the `OAuth & Permissions` section
+![image](https://user-images.githubusercontent.com/9341349/45330930-d074a680-b535-11e8-892b-e6270d5fcd65.png)
+
+Define these scopes
+![image](https://user-images.githubusercontent.com/9341349/45330961-0154db80-b536-11e8-96fa-e47506a5a99a.png)
+
+Define your request URL and Subscribe to bot events in the `Event Subscriptions` section
+![image](https://user-images.githubusercontent.com/9341349/45331021-61e41880-b536-11e8-9b35-53cef43bfdeb.png)
+
+![image](https://user-images.githubusercontent.com/9341349/45331285-db303b00-b537-11e8-9a2c-687381e054c5.png)
