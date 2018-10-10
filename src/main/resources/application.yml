@@ -13,6 +13,7 @@ management:
 
 # Comma separated list of admin users
 admin.users: ${ADMIN_USERS}
+banned.users: ${BANNED_USERS:USLACKBOT}
 spring.data.mongodb:
   host: ${MONGO_HOST}
   port: ${MONGO_PORT}
