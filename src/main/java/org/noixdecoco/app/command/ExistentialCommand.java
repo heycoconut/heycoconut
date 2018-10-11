@@ -18,12 +18,9 @@ public class ExistentialCommand extends CoconutCommand {
 
     private String channel;
 
-    private Random random;
-
     private ExistentialCommand(String user, String channel) {
         super(user);
         this.channel = channel;
-        random = new Random(System.currentTimeMillis());
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {

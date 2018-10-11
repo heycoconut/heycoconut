@@ -16,12 +16,9 @@ public class MotivationalCommand extends CoconutCommand {
 
     private String channel;
 
-    private Random random;
-
     private MotivationalCommand(String user, String channel) {
         super(user);
         this.channel = channel;
-        random = new Random(System.currentTimeMillis());
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
