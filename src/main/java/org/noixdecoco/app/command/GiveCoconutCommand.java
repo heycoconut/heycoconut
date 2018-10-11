@@ -76,7 +76,7 @@ public class GiveCoconutCommand extends CoconutCommand {
             try {
                 long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
                 responseMessage.append("<@").append(userId).append("> gave ").append(coconutCount)
-                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">, ");
+                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
                 slackService.sendMessage(name, "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
             } catch (InsufficientCoconutsException e) {
