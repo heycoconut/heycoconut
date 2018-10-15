@@ -65,7 +65,7 @@ public class MainREST {
         if(!treatedEventIds.contains(request.getEventId()) && signatureUtil.signatureIsValid(headers, bodyString)) {
             if(bannedUsers != null || bannedUsers.length == 0) {
                 for (String bannedUser : bannedUsers) {
-                    if(request.getEvent().getUser().equals(bannedUser)) {
+                    if(bannedUser.equals(request.getEvent().getUser())) {
                         LOGGER.info("Ignoring banned user: " + bannedUser);
                         return false;
                     }
