@@ -72,17 +72,18 @@ public class GiveCoconutCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         StringBuilder responseMessage = new StringBuilder();
+        String giver = "<@" + userId + ">";
         for (String name : receivers) {
             try {
                 long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
-                responseMessage.append("<@").append(userId).append("> gave ").append(coconutCount)
+                responseMessage.append(giver).append(" gave ").append(coconutCount)
                         .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                slackService.sendMessage(name, "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
+                slackService.sendMessage(name, giver + " has given you " + coconutCount + " coconut" + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
             } catch (InsufficientCoconutsException e) {
-                responseMessage.append("<@" + userId + "> didn't have enough coconuts remaining for <@" + name + "> :sob:");
+                responseMessage.append(giver + " didn't have enough coconuts remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {
-                responseMessage.append("<@" + userId + "> tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
+                responseMessage.append(giver + " tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
             } catch (CoconutException e) {
                 responseMessage.append("Something went wrong. :sad:");
             }
