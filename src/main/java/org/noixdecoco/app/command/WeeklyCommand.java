@@ -93,7 +93,7 @@ public class WeeklyCommand extends CoconutCommand {
         builder = generateTop(builder,givers);
 
         builder.append("\n*Top " + max + " Recipients* :trophy:\n\n");
-        builder = generateTop(builder,givers);
+        builder = generateTop(builder,recipients);
 
         return builder.toString();
     }
