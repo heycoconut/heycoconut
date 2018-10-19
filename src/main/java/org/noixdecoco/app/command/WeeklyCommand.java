@@ -67,9 +67,7 @@ public class WeeklyCommand extends CoconutCommand {
 
         Map<String, Long> givers = new HashMap<>();
         Map<String, Long> recipients = new HashMap<>();
-        int count = 1;
 
-        builder.append("*Top " + max + " Givers* :heart:\n\n");
         for (CoconutJournal journalEntry : journals) {
 
             String user = journalEntry.getUsername();
@@ -91,17 +89,11 @@ public class WeeklyCommand extends CoconutCommand {
             }
         }
 
-        for (Map.Entry<String, Long> giver : sortValDesc(givers).entrySet()) {
-            if (count >= max) break;
-            builder.append(count++).append(". <@").append(giver.getKey()).append(">: ").append(giver.getValue()).append("\n");
-        }
+        builder.append("*Top " + max + " Givers* :heart:\n\n");
+        builder = generateTop(builder,givers);
 
-        count = 1;
         builder.append("\n*Top " + max + " Recipients* :trophy:\n\n");
-        for (Map.Entry<String, Long> recipient : sortValDesc(recipients).entrySet()) {
-            if (count >= max) break;
-            builder.append(count++).append(". <@").append(recipient.getKey()).append(">: ").append(recipient.getValue()).append("\n");
-        }
+        builder = generateTop(builder,givers);
 
         return builder.toString();
     }
@@ -112,5 +104,14 @@ public class WeeklyCommand extends CoconutCommand {
                 .sorted(Map.Entry.<String, Long>comparingByValue().reversed())
                 .collect(toMap(Map.Entry::getKey,
                         Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+    }
+
+    private StringBuilder generateTop(StringBuilder builder, Map<String, Long> userMap){
+        int count = 1;
+        for (Map.Entry<String, Long> user : sortValDesc(userMap).entrySet()) {
+            builder.append(count++).append(". <@").append(user.getKey()).append(">: ").append(user.getValue()).append("\n");
+            if (count > max) break;
+        }
+        return builder;
     }
 }
