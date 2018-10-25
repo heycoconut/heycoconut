@@ -83,7 +83,7 @@ public class GiveCoconutCommand extends CoconutCommand {
             } catch (InsufficientCoconutsException e) {
                 responseMessage.append(giver + " didn't have enough coconuts remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {
-                responseMessage.append(giver + " tried giving himself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
+                responseMessage.append(giver + " tried giving themself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
             } catch (CoconutException e) {
                 responseMessage.append("Something went wrong. :sad:");
             }
