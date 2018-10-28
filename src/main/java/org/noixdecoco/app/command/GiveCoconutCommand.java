@@ -22,13 +22,14 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected String channel;
 
     @Value("${emoji}")
-    protected static String emoji;
+    protected String emoji;
+
     protected static String COCONUT_EMOJI;
     protected static final String TAG_START = "<@";
 
     @PostConstruct
     private void initEmoji() {
-        COCONUT_EMOJI = ":" + emoji + ":";
+        this.COCONUT_EMOJI = ":" + emoji + ":";
     }
 
     protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
