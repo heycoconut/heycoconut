@@ -20,7 +20,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
     @Value("${emoji}")
     protected static String emoji;
 
-    protected static final String COCONUT_EMOJI = ":" + emoji + ":";
+    protected static String COCONUT_EMOJI = ":" + emoji + ":";
     protected static final String TAG_START = "<@";
 
     protected ForceGiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
