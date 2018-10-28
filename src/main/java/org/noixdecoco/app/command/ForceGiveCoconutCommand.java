@@ -3,6 +3,7 @@ package org.noixdecoco.app.command;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
 import java.util.HashSet;
@@ -16,7 +17,10 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
     protected int coconutCount;
     protected String channel;
 
-    protected static final String COCONUT_EMOJI = ":coconut:";
+    @Value("${emoji}")
+    protected static String emoji;
+
+    protected static final String COCONUT_EMOJI = ":" + emoji + ":";
     protected static final String TAG_START = "<@";
 
     protected ForceGiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
@@ -71,7 +75,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
         StringBuilder responseMessage = new StringBuilder();
         for (String name : receivers) {
             coconutService.addCoconut(name, coconutCount);
-            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" coconut").append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
+            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" " + emoji).append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
         }
         slackService.sendMessage(channel, responseMessage.toString());
     }
