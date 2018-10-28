@@ -8,7 +8,6 @@ public class GlobalConfig {
     public static String COCONUT_EMOJI;
     public static String emoji;
 
-
     @Value("${emoji}")
     public void setEmoji(String emoji) {
         this.emoji = emoji;

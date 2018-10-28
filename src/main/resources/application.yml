@@ -31,7 +31,7 @@ daily.coconut.limit: ${DAILY_COCONUT_LIMIT:5}
 top.weekly.limit: ${TOP_WEEKLY_LIMIT:10}
 tutorial.message: >
   Thank you for using HeyCoconut! To give a ${EMOJI}, simply tag one or more users and add the number of ${EMOJI} emojis you wish to give each of them.
-  You can also add a ${EMOJI} reaction on someone's message to give them one. You can only give a maximum of *${DAILY_COCONUT_LIMIT:5}* coconuts per day.
+  You can also add a ${EMOJI} reaction on someone's message to give them one. You can only give a maximum of *${DAILY_COCONUT_LIMIT:5}* ${EMOJI}s per day.
   You can always ask for help by tagging me and saying *help*, or if you want to see the leaderboards, you can tag me and say *leaderboard*. Other commands include
   *trivia*, 
 coconut.facts:
