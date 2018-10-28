@@ -9,6 +9,7 @@ import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
+import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -22,9 +23,13 @@ public class GiveCoconutCommand extends CoconutCommand {
 
     @Value("${emoji}")
     protected static String emoji;
-
-    protected static String COCONUT_EMOJI = ":" + emoji + ":";
+    protected static String COCONUT_EMOJI;
     protected static final String TAG_START = "<@";
+
+    @PostConstruct
+    private void initEmoji() {
+        COCONUT_EMOJI = ":" + emoji + ":";
+    }
 
     protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
         super(giver);
