@@ -3,9 +3,7 @@ package org.noixdecoco.app.command;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;

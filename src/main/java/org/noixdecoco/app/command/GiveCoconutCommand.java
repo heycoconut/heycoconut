@@ -6,10 +6,7 @@ import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
 import org.noixdecoco.app.exception.InvalidReceiverException;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
-
-import javax.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
