@@ -20,16 +20,8 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected Set<String> receivers;
     protected int coconutCount;
     protected String channel;
-
-    protected String emoji;
-    protected static String COCONUT_EMOJI;
+    protected String emoji = GlobalConfig.emoji;
     protected static final String TAG_START = "<@";
-
-    @Value("${emoji}")
-    protected void setEmoji(String emoji) {
-        this.emoji=emoji;
-        this.COCONUT_EMOJI = ":" + emoji + ":";
-    }
 
     protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
         super(giver);
@@ -42,7 +34,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
+                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
                     return true;
                 }
             }
@@ -59,7 +51,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     private static int extractNumberOfCoconuts(String message) {
         int count = 1;
         if (message != null) {
-            count = StringUtils.countOccurrencesOf(message, COCONUT_EMOJI);
+            count = StringUtils.countOccurrencesOf(message, GlobalConfig.COCONUT_EMOJI);
         }
         return count;
     }
