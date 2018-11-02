@@ -7,7 +7,6 @@ import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
 import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.springframework.util.StringUtils;
-
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
@@ -18,8 +17,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected Set<String> receivers;
     protected int coconutCount;
     protected String channel;
-
-    protected static final String COCONUT_EMOJI = ":coconut:";
+    protected String emoji = GlobalConfig.emoji;
     protected static final String TAG_START = "<@";
 
     protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
@@ -33,7 +31,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
+                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && !text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains("steal ")) {
                     return true;
                 }
             }
@@ -50,7 +48,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     private static int extractNumberOfCoconuts(String message) {
         int count = 1;
         if (message != null) {
-            count = StringUtils.countOccurrencesOf(message, COCONUT_EMOJI);
+            count = StringUtils.countOccurrencesOf(message, GlobalConfig.COCONUT_EMOJI);
         }
         return count;
     }
@@ -77,13 +75,13 @@ public class GiveCoconutCommand extends CoconutCommand {
             try {
                 long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
                 responseMessage.append(giver).append(" gave ").append(coconutCount)
-                        .append(" coconut").append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
+                        .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                slackService.sendMessage(name, giver + " has given you " + coconutCount + " coconut" + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* coconuts.");
+                slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
             } catch (InsufficientCoconutsException e) {
-                responseMessage.append(giver + " didn't have enough coconuts remaining for <@" + name + "> :sob:");
+                responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {
-                responseMessage.append(giver + " tried giving themself a coconut, unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
+                responseMessage.append(giver + " tried giving themself a " + emoji + ", unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
             } catch (CoconutException e) {
                 responseMessage.append("Something went wrong. :sad:");
             }
@@ -91,7 +89,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         slackService.sendMessage(channel, responseMessage.toString());
 
         long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* coconuts left to give today.", true, userId);
+        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
 
     }
 
