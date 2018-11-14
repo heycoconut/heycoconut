@@ -17,13 +17,15 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected Set<String> receivers;
     protected int coconutCount;
     protected String channel;
+    protected String timestamp;
     protected String emoji = GlobalConfig.emoji;
     protected static final String TAG_START = "<@";
 
-    protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
+    protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, String timestamp, int coconutCount) {
         super(giver);
         this.receivers = receivers;
         this.channel = channel;
+        this.timestamp = timestamp;
         this.coconutCount = coconutCount;
     }
 
@@ -42,7 +44,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     public static CoconutCommand build(SlackRequestDTO request) {
         int coconutsToGive = extractNumberOfCoconuts(request.getEvent().getText());
         Set<String> receivers = extractTaggedUsers(request.getEvent().getText());
-        return new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
+        return new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), request.getEvent().getTs(), coconutsToGive);
     }
 
     private static int extractNumberOfCoconuts(String message) {
@@ -78,6 +80,7 @@ public class GiveCoconutCommand extends CoconutCommand {
                         .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
                 slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
+                slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
             } catch (InsufficientCoconutsException e) {
                 responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {

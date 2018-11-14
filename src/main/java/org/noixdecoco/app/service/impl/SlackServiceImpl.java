@@ -2,10 +2,7 @@ package org.noixdecoco.app.service.impl;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.noixdecoco.app.dto.AuthInfoDTO;
-import org.noixdecoco.app.dto.ChannelDTO;
-import org.noixdecoco.app.dto.MessageDTO;
-import org.noixdecoco.app.dto.SlackAction;
+import org.noixdecoco.app.dto.*;
 import org.noixdecoco.app.service.SlackService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -47,6 +44,16 @@ public class SlackServiceImpl implements SlackService {
             message.setUser(toUser);
         }
         String response = restTemplate.postForObject(SLACK_API_URL + (ephemeral ? SlackAction.POST_EPHEMERAL : SlackAction.POST_MESSAGE), new HttpEntity(message, createHttpHeaders()), String.class);
+        LOGGER.info("Response: " + response);
+    }
+
+    @Override
+    public void addReaction(String channel, String timestamp, String emoji) {
+        ReactionDTO reaction = new ReactionDTO();
+        reaction.setChannel(channel);
+        reaction.setTimestamp(timestamp);
+        reaction.setEmoji(emoji);
+        String response = restTemplate.postForObject(SLACK_API_URL + SlackAction.ADD_REACTION, new HttpEntity(reaction, createHttpHeaders()), String.class);
         LOGGER.info("Response: " + response);
     }
 
