@@ -52,7 +52,7 @@ public class SlackServiceImpl implements SlackService {
         ReactionDTO reaction = new ReactionDTO();
         reaction.setChannel(channel);
         reaction.setTimestamp(timestamp);
-        reaction.setEmoji(emoji);
+        reaction.setName(emoji);
         String response = restTemplate.postForObject(SLACK_API_URL + SlackAction.ADD_REACTION, new HttpEntity(reaction, createHttpHeaders()), String.class);
         LOGGER.info("Response: " + response);
     }
