@@ -4,6 +4,7 @@ public enum SlackAction {
 
     POST_MESSAGE("chat.postMessage"),
     POST_EPHEMERAL("chat.postEphemeral"),
+    ADD_REACTION("reactions.add"),
     CHANNEL_INFO("channels.info"),
     BOT_INFO("bot.info"),
     AUTH_INFO("auth.info");

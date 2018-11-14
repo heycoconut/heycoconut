@@ -12,8 +12,8 @@ import java.util.function.Predicate;
 public class CoconutReactionCommand extends GiveCoconutCommand {
 
 
-    protected CoconutReactionCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
-        super(giver, receivers, channel, coconutCount);
+    protected CoconutReactionCommand(String giver, Set<String> receivers, String channel, String timestamp, int coconutCount) {
+        super(giver, receivers, channel, timestamp, coconutCount);
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
@@ -24,6 +24,6 @@ public class CoconutReactionCommand extends GiveCoconutCommand {
         int coconutsToGive = 1;
         Set<String> receivers = new HashSet<>(1);
         receivers.add(request.getEvent().getItemUser());
-        return new CoconutReactionCommand(request.getEvent().getUser(), receivers, request.getEvent().getItem().getChannel(), coconutsToGive);
+        return new CoconutReactionCommand(request.getEvent().getUser(), receivers, request.getEvent().getItem().getChannel(), request.getEvent().getTs(), coconutsToGive);
     }
 }
