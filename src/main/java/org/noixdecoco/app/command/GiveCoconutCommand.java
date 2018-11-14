@@ -79,8 +79,11 @@ public class GiveCoconutCommand extends CoconutCommand {
                 responseMessage.append(giver).append(" gave ").append(coconutCount)
                         .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
-                slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
+                if(timestamp != null) {
+                    slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
+                } else {
+                    slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
+                }
             } catch (InsufficientCoconutsException e) {
                 responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
             } catch (InvalidReceiverException e) {

@@ -24,6 +24,6 @@ public class CoconutReactionCommand extends GiveCoconutCommand {
         int coconutsToGive = 1;
         Set<String> receivers = new HashSet<>(1);
         receivers.add(request.getEvent().getItemUser());
-        return new CoconutReactionCommand(request.getEvent().getUser(), receivers, request.getEvent().getItem().getChannel(), request.getEvent().getTs(), coconutsToGive);
+        return new CoconutReactionCommand(request.getEvent().getUser(), receivers, request.getEvent().getItem().getChannel(), null, coconutsToGive);
     }
 }
