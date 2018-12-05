@@ -43,7 +43,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     protected void performAction() {
         Flux<CoconutJournal> journals = journalRepo.findByChannel(channel);
         Map<String, Long> rankings = new HashMap<>();
-        LOGGER.info("Executing action CoconutChannelRankingsCommand");
+        LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + journals.count().block());
         // Not very efficient in the long run. Will need to "flatten" data eventually
         journals.subscribe((journal) -> {
             LOGGER.info("Calculating...");
