@@ -43,11 +43,12 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     protected void performAction() {
         Flux<CoconutJournal> journals = journalRepo.findByChannel(channel);
         Map<String, Long> rankings = new HashMap<>();
-
+        LOGGER.info("Executing action CoconutChannelRankingsCommand");
         // Not very efficient in the long run. Will need to "flatten" data eventually
         journals.subscribe((journal) -> {
-                rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
-                rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
+            LOGGER.info("Calculating...");
+            rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
+            rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
         });
         journals.doOnComplete(() -> {
             final Map<String, Long> sorted = rankings.entrySet().stream()
