@@ -3,6 +3,7 @@ package org.noixdecoco.app.command;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.command.annotation.Command;
+import org.noixdecoco.app.data.repository.CoconutJournalRepository;
 import org.noixdecoco.app.data.repository.CoconutLedgerRepository;
 import org.noixdecoco.app.service.CoconutService;
 import org.noixdecoco.app.service.SlackService;
@@ -26,6 +27,9 @@ public abstract class CoconutCommand {
 
     @Autowired
     protected CoconutLedgerRepository ledgerRepo;
+
+    @Autowired
+    protected CoconutJournalRepository journalRepo;
 
     protected String userId;
 

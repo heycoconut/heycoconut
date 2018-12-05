@@ -19,6 +19,8 @@ public class CoconutJournal {
 
     private LocalDateTime coconutGivenAt;
 
+    private String channel;
+
     public ObjectId getId() {
         return id;
     }
@@ -61,6 +63,14 @@ public class CoconutJournal {
 
     public void setCoconutGivenAt(LocalDateTime coconutGivenAt) {
         this.coconutGivenAt = coconutGivenAt;
+    }
+
+    public String getChannel() {
+        return channel;
+    }
+
+    public void setChannel(String channel) {
+        this.channel = channel;
     }
 
     public static CoconutJournal createNew() {
