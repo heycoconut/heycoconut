@@ -45,19 +45,16 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
         Map<String, Long> rankings = new HashMap<>();
         LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + journals.count().block());
         // Not very efficient in the long run. Will need to "flatten" data eventually
-        journals.subscribe((journal) -> {
+        for (CoconutJournal journal : journals.buffer().blockFirst()) {
             LOGGER.info("Calculating...");
             rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
             rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
-        });
-        journals.doOnComplete(() -> {
-            final Map<String, Long> sorted = rankings.entrySet().stream()
-                    .sorted(Map.Entry.comparingByValue())
-                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
-            slackService.sendMessage(channel, composeLeaderboard(sorted));
-            LOGGER.info("Inside doOnComplete method. Collected " + sorted.size() + " entries");
-        });
-
+        }
+        final Map<String, Long> sorted = rankings.entrySet().stream()
+            .sorted(Map.Entry.comparingByValue())
+            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
+        slackService.sendMessage(channel, composeLeaderboard(sorted));
+        LOGGER.info("Inside doOnComplete method. Collected " + sorted.size() + " entries");
 
     }
 
