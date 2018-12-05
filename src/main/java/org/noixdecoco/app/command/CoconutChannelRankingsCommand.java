@@ -59,7 +59,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     }
 
     private String composeLeaderboard(Map<String, Long> topCocos) {
-        StringBuilder builder = new StringBuilder();
+        final StringBuilder builder = new StringBuilder();
         builder.append("*Leaderboard* for <#").append(channel).append(">\n\n");
         int currentRank = 1;
         topCocos.entrySet().stream().limit(10).forEach((entry) -> {
