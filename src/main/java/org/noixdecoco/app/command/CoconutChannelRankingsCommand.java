@@ -51,7 +51,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
             rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
         }
         final Map<String, Long> sorted = rankings.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue())
+            .sorted(Map.Entry.comparingByValue((x1,x2)-> Long.compare(x2,x1)))
             .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
         slackService.sendMessage(channel, composeLeaderboard(sorted));
         LOGGER.info("Inside doOnComplete method. Collected " + sorted.size() + " entries");
