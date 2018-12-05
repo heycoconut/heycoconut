@@ -34,7 +34,7 @@ public class CoconutServiceImpl implements CoconutService {
     private long dailyLimit;
 
     @Override
-    public long giveCoconut(String fromUser, String toUser, int numCoconuts) throws CoconutException {
+    public long giveCoconut(String fromUser, String toUser, int numCoconuts, String channel) throws CoconutException {
         if (fromUser.equals(toUser)) {
             throw new InvalidReceiverException();
         }
@@ -62,7 +62,7 @@ public class CoconutServiceImpl implements CoconutService {
         giversLedger.setCoconutsGiven(giversLedger.getCoconutsGiven() + numCoconuts);
         LocalDateTime now = LocalDateTime.now();
         giversLedger.setLastCoconutGivenAt(now);
-        recordTransaction(fromUser, toUser, numCoconuts, now);
+        recordTransaction(fromUser, toUser, numCoconuts, channel, now);
 
         coconutRepo.save(giversLedger).subscribe();
 
@@ -112,12 +112,13 @@ public class CoconutServiceImpl implements CoconutService {
         return dailyLimit;
     }
 
-    public void recordTransaction(String username, String recipient, int numCoconuts, LocalDateTime date) {
+    public void recordTransaction(String username, String recipient, int numCoconuts, String channel, LocalDateTime date) {
         CoconutJournal journal = CoconutJournal.createNew();
         journal.setUsername(username);
         journal.setRecipient(recipient);
         journal.setCoconutsGiven(Long.valueOf(numCoconuts));
         journal.setCoconutGivenAt(date);
+        journal.setChannel(channel);
         coconutJournalRepo.save(journal).subscribe();
     }
 

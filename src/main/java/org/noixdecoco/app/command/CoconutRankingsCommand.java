@@ -20,7 +20,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("leaderboard");
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("leaderboard") && r.getEvent().getText().contains("overall");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {

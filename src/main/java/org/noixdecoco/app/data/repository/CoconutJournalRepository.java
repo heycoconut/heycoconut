@@ -11,4 +11,5 @@ public interface CoconutJournalRepository extends ReactiveMongoRepository<Coconu
     Flux<CoconutJournal> findByUsername(String username);
     Flux<CoconutJournal> findAll(Sort sort);
     Flux<CoconutJournal> findByCoconutGivenAtBetween(LocalDateTime start, LocalDateTime end);
+    Flux<CoconutJournal> findByChannel(String channel);
 }

@@ -75,7 +75,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         String giver = "<@" + userId + ">";
         for (String name : receivers) {
             try {
-                long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount);
+                long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount, channel);
                 responseMessage.append(giver).append(" gave ").append(coconutCount)
                         .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
