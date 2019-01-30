@@ -1,5 +1,6 @@
 package org.noixdecoco.app.command;
 
+import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.command.annotation.Command;
@@ -61,9 +62,9 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     private String composeLeaderboard(Map<String, Long> topCocos) {
         final StringBuilder builder = new StringBuilder();
         builder.append("*Leaderboard* for <#").append(channel).append(">\n\n");
-        int currentRank = 1;
+        AtomicInteger currentRank = new AtomicInteger(1);
         topCocos.entrySet().stream().limit(10).forEach((entry) -> {
-            builder.append(currentRank++).append(". <@").append(entry.getKey()).append(">: ").append(entry.getValue()).append("\n");
+            builder.append(currentRank.getAndIncrement()).append(". <@").append(entry.getKey()).append(">: ").append(entry.getValue()).append("\n");
         });
         return builder.toString();
     }
