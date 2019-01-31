@@ -18,13 +18,15 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected int coconutCount;
     protected String channel;
     protected String timestamp;
+    protected String message;
     protected String emoji = GlobalConfig.emoji;
     protected static final String TAG_START = "<@";
 
-    protected GiveCoconutCommand(String giver, Set<String> receivers, String channel, String timestamp, int coconutCount) {
+    protected GiveCoconutCommand(String giver, String message, Set<String> receivers, String channel, String timestamp, int coconutCount) {
         super(giver);
         this.receivers = receivers;
         this.channel = channel;
+        this.message = message;
         this.timestamp = timestamp;
         this.coconutCount = coconutCount;
     }
@@ -44,7 +46,7 @@ public class GiveCoconutCommand extends CoconutCommand {
     public static CoconutCommand build(SlackRequestDTO request) {
         int coconutsToGive = extractNumberOfCoconuts(request.getEvent().getText());
         Set<String> receivers = extractTaggedUsers(request.getEvent().getText());
-        return new GiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), request.getEvent().getTs(), coconutsToGive);
+        return new GiveCoconutCommand(request.getEvent().getUser(), request.getEvent().getText(), receivers, request.getEvent().getChannel(), request.getEvent().getTs(), coconutsToGive);
     }
 
     private static int extractNumberOfCoconuts(String message) {
@@ -79,7 +81,8 @@ public class GiveCoconutCommand extends CoconutCommand {
                 responseMessage.append(giver).append(" gave ").append(coconutCount)
                         .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s. " : ". ") + "You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
+                slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s " : " ") + "In <#" + channel + ">. \n`"
+                        + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
                 slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
             } catch (InsufficientCoconutsException e) {
                 responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
