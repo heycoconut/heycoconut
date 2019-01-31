@@ -75,31 +75,44 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected void performAction() {
         StringBuilder responseMessage = new StringBuilder();
         String giver = "<@" + userId + ">";
-        for (String name : receivers) {
-            try {
-                long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount, channel);
-                responseMessage.append(giver).append(" gave ").append(coconutCount)
-                        .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
-
-                slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s " : " ") + "In <#" + channel + ">. \n`"
-                        + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
-                slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
-            } catch (InsufficientCoconutsException e) {
-                responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
-            } catch (InvalidReceiverException e) {
-                responseMessage.append(giver + " tried giving themself a " + emoji + ", unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
-            } catch (CoconutException e) {
-                responseMessage.append("Something went wrong. :sad:");
-            }
-        }
-        if(timestamp == null) {
-            // Only send a message if coconut wasn't given verbally, so no timestamp on reaction added
-            slackService.sendMessage(channel, responseMessage.toString());
-        }
         long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-        slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
+        if(coconutCount > coconutsRemaining) {
+            slackService.sendMessage(channel, "You tried giving " + coconutCount + " " + emoji + " but you have *"
+                    + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
+            slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
+        } else if(receivers.size() > 1 && (coconutCount / receivers.size() < 1)) {
+            // If you split the coconuts by the number of people but dont have enough for each of them
+            slackService.sendMessage(channel, "When splitting " + coconutCount + " " + emoji + " by " + receivers.size()
+                    + " people, that gives less than 1 per person. Either tag fewer people or give more " + emoji + "s.",true, userId);
+            slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
+        } else {
+            coconutCount /= receivers.size(); // Split coconuts between people and possibly leave a remainder
+            for (String name : receivers) {
+                try {
+                    long numCoconuts = coconutService.giveCoconut(userId, name, coconutCount, channel);
+                    responseMessage.append(giver).append(" gave ").append(coconutCount)
+                            .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
+                    slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s " : " ") + "In <#" + channel + ">. \n`"
+                            + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
+                    slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
+                } catch (InsufficientCoconutsException e) {
+                    responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
+                    slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
+                } catch (InvalidReceiverException e) {
+                    responseMessage.append(giver + " tried giving themself a " + emoji + ", unfortunately that's illegal :sob: If you ask nicely, maybe someone will give you one!");
+                    slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
+                } catch (CoconutException e) {
+                    responseMessage.append("Something went wrong. :sad:");
+                    slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
+                }
+            }
+            if(timestamp == null) {
+                // Only send a message if coconut wasn't given verbally, so no timestamp on reaction added
+                slackService.sendMessage(channel, responseMessage.toString());
+            }
+            coconutsRemaining = coconutService.getCoconutsRemaining(userId);
+            slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
+        }
     }
-
-
 }
