@@ -13,6 +13,8 @@ public class ChannelDTO implements SlackDTO {
     private Boolean isChannel;
     @JsonProperty("is_general")
     private Boolean isGeneral;
+    @JsonProperty("is_member")
+    private Boolean isMember;
     private List<String> members;
 
     public String getId() {
@@ -53,6 +55,14 @@ public class ChannelDTO implements SlackDTO {
 
     public void setGeneral(Boolean general) {
         isGeneral = general;
+    }
+
+    public Boolean getMember() {
+        return isMember;
+    }
+
+    public void setMember(Boolean member) {
+        isMember = member;
     }
 
     public List<String> getMembers() {
