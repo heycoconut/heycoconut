@@ -87,7 +87,7 @@ public class GiveCoconutCommand extends CoconutCommand {
         if(coconutCount > coconutsRemaining) {
             LOGGER.info(coconutsRemaining + " is less than " + coconutCount);
             slackService.sendMessage(channel, "You tried giving " + coconutCount + " " + emojiPlural + " but you have *"
-                    + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emojiPlural + "s left to give today.", true, userId);
+                    + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emojiPlural + " left to give today.", true, userId);
             slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
         } else if(receivers.size() > 1 && (coconutCount / receivers.size() < 1)) {
             slackService.sendMessage(channel, "Not enough " + emojiPlural + " to split between " + receivers.size() + " people.",true, userId);
