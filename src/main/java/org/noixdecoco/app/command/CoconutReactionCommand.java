@@ -1,5 +1,6 @@
 package org.noixdecoco.app.command;
 
+import org.noixdecoco.app.GlobalConfig;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;

@@ -1,5 +1,8 @@
 package org.noixdecoco.app.command;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.noixdecoco.app.GlobalConfig;
 import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
@@ -7,12 +10,15 @@ import org.noixdecoco.app.exception.CoconutException;
 import org.noixdecoco.app.exception.InsufficientCoconutsException;
 import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.springframework.util.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
 @Command(EventType.MESSAGE)
 public class GiveCoconutCommand extends CoconutCommand {
+
+    private static final Logger LOGGER = LogManager.getLogger(GiveCoconutCommand.class);
 
     protected Set<String> receivers;
     protected int coconutCount;
@@ -75,15 +81,16 @@ public class GiveCoconutCommand extends CoconutCommand {
     protected void performAction() {
         StringBuilder responseMessage = new StringBuilder();
         String giver = "<@" + userId + ">";
-        long coconutsRemaining = coconutService.getCoconutsRemaining(userId);
+        int coconutsRemaining = coconutService.getCoconutsRemaining(userId);
+        LOGGER.info(userId + " has " + coconutsRemaining + " coconuts left to give today.");
+        String emojiPlural = emoji + (coconutCount > 0 ? "s" : "");
         if(coconutCount > coconutsRemaining) {
-            slackService.sendMessage(channel, "You tried giving " + coconutCount + " " + emoji + " but you have *"
-                    + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
+            LOGGER.info(coconutsRemaining + " is less than " + coconutCount);
+            slackService.sendMessage(channel, "You tried giving " + coconutCount + " " + emojiPlural + " but you have *"
+                    + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emojiPlural + "s left to give today.", true, userId);
             slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
         } else if(receivers.size() > 1 && (coconutCount / receivers.size() < 1)) {
-            // If you split the coconuts by the number of people but dont have enough for each of them
-            slackService.sendMessage(channel, "When splitting " + coconutCount + " " + emoji + " by " + receivers.size()
-                    + " people, that gives less than 1 per person. Either tag fewer people or give more " + emoji + "s.",true, userId);
+            slackService.sendMessage(channel, "Not enough " + emojiPlural + " to split between " + receivers.size() + " people.",true, userId);
             slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
         } else {
             coconutCount /= receivers.size(); // Split coconuts between people and possibly leave a remainder
@@ -93,8 +100,9 @@ public class GiveCoconutCommand extends CoconutCommand {
                     responseMessage.append(giver).append(" gave ").append(coconutCount)
                             .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                    slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emoji + (coconutCount > 1 ? "s " : " ") + "In <#" + channel + ">. \n`"
-                            + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emoji +"s.");
+                    message = message.replaceAll(":" + emoji + ":", ""); //Remove emojis from message
+                    slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. \n`"
+                            + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emojiPlural +".");
                     slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
                 } catch (InsufficientCoconutsException e) {
                     responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
