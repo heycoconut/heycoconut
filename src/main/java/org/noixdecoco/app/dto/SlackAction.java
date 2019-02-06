@@ -7,6 +7,7 @@ public enum SlackAction {
     ADD_REACTION("reactions.add"),
     CHANNEL_INFO("channels.info"),
     BOT_INFO("bot.info"),
+    LIST_CHANNELS("conversations.list"),
     AUTH_INFO("auth.info");
 
     private String key;

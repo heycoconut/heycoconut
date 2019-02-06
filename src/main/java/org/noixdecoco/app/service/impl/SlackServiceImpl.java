@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -78,6 +79,16 @@ public class SlackServiceImpl implements SlackService {
             }
         }
         return botUserId;
+    }
+
+    @Override
+    public ChannelListDTO getChannelsBotIsIn() {
+        HttpEntity entity = new HttpEntity(createHttpHeaders());
+        Map<String, String> param = new HashMap<>();
+        param.put("types", "private_channel,public_channel");
+        ResponseEntity<ChannelListDTO> response = restTemplate.exchange(
+                SLACK_API_URL + SlackAction.LIST_CHANNELS, HttpMethod.GET, entity, ChannelListDTO.class, param);
+        return response.getBody();
     }
 
     private HttpHeaders createHttpHeaders() {
