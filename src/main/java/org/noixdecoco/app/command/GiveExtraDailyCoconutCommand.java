@@ -5,12 +5,13 @@ import org.noixdecoco.app.command.annotation.Command;
 import org.noixdecoco.app.dto.EventType;
 import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.springframework.util.StringUtils;
+
 import java.util.HashSet;
 import java.util.Set;
 import java.util.function.Predicate;
 
 @Command(value = EventType.MESSAGE, adminOnly = true)
-public class ForceGiveCoconutCommand extends CoconutCommand {
+public class GiveExtraDailyCoconutCommand extends CoconutCommand {
 
     protected Set<String> receivers;
     protected int coconutCount;
@@ -18,7 +19,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
     protected String emoji = GlobalConfig.emoji;
     protected static final String TAG_START = "<@";
 
-    protected ForceGiveCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
+    protected GiveExtraDailyCoconutCommand(String giver, Set<String> receivers, String channel, int coconutCount) {
         super(giver);
         this.receivers = receivers;
         this.channel = channel;
@@ -29,7 +30,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains(" gift")) {
+                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && text.toLowerCase().contains("sudo gift ")) {
                     return true;
                 }
             }
@@ -40,7 +41,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
     public static CoconutCommand build(SlackRequestDTO request) {
         int coconutsToGive = extractNumberOfCoconuts(request.getEvent().getText());
         Set<String> receivers = extractTaggedUsers(request.getEvent().getText());
-        return new ForceGiveCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
+        return new GiveExtraDailyCoconutCommand(request.getEvent().getUser(), receivers, request.getEvent().getChannel(), coconutsToGive);
     }
 
     private static int extractNumberOfCoconuts(String message) {
@@ -69,8 +70,8 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
     protected void performAction() {
         StringBuilder responseMessage = new StringBuilder();
         for (String name : receivers) {
-            coconutService.addCoconut(name, coconutCount);
-            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" " + emoji).append((Math.abs(coconutCount) > 1 ? "s" : "")).append(".");
+            coconutService.subtractCoconutsGiven(name, coconutCount);
+            responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" extra " + emoji).append((Math.abs(coconutCount) > 1 ? "s" : "")).append(" to gift for the day.");
         }
         slackService.sendMessage(channel, responseMessage.toString());
     }
