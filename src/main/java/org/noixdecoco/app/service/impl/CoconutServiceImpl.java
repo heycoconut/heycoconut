@@ -31,7 +31,7 @@ public class CoconutServiceImpl implements CoconutService {
     private CoconutJournalRepository coconutJournalRepo;
 
     @Value("${daily.coconut.limit}")
-    private long dailyLimit;
+    private int dailyLimit;
 
     @Override
     public long giveCoconut(String fromUser, String toUser, int numCoconuts, String channel) throws CoconutException {
@@ -45,14 +45,11 @@ public class CoconutServiceImpl implements CoconutService {
         if (!fromUserLedger.isEmpty()) {
             giversLedger = fromUserLedger.get(0);
             if (giversLedger.getLastCoconutGivenAt() == null || giversLedger.getLastCoconutGivenAt().isBefore(startOfDay)) {
-                giversLedger.setCoconutsGiven(0l);
+                giversLedger.setCoconutsGiven(0);
                 giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
             }
         } else {
-            giversLedger = CoconutLedger.createNew();
-            giversLedger.setUsername(fromUser);
-            giversLedger.setCoconutsGiven(0l);
-            giversLedger.setLastCoconutGivenAt(LocalDateTime.now());
+            giversLedger = initializeLedger(fromUser);
         }
         if (numCoconuts > dailyLimit || (giversLedger.getLastCoconutGivenAt().isAfter(startOfDay) &&
                 giversLedger.getCoconutsGiven() + numCoconuts > dailyLimit)) {
@@ -68,9 +65,8 @@ public class CoconutServiceImpl implements CoconutService {
 
         List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
         if (ledgers.isEmpty()) {
-            CoconutLedger ledger = CoconutLedger.createNew();
-            ledger.setUsername(toUser);
-            ledger.setNumberOfCoconuts(Long.valueOf(numCoconuts));
+            CoconutLedger ledger = initializeLedger(toUser);
+            ledger.setNumberOfCoconuts(numCoconuts);
             coconutRepo.insert(ledger).subscribe(LOGGER::info);
             return numCoconuts;
         } else {
@@ -82,13 +78,20 @@ public class CoconutServiceImpl implements CoconutService {
         }
     }
 
+    private CoconutLedger initializeLedger(String userId) {
+        CoconutLedger ledger = CoconutLedger.createNew();
+        ledger.setUsername(userId);
+        ledger.setCoconutsGiven(0);
+        ledger.setLastCoconutGivenAt(LocalDateTime.now());
+        return ledger;
+    }
+
     @Override
     public void addCoconut(String toUser, int numCoconuts) {
         List<CoconutLedger> ledgers = coconutRepo.findByUsername(toUser).collectList().block();
         if (ledgers.isEmpty()) {
-            CoconutLedger ledger = CoconutLedger.createNew();
-            ledger.setUsername(toUser);
-            ledger.setNumberOfCoconuts(Long.valueOf(numCoconuts));
+            CoconutLedger ledger = initializeLedger(toUser);
+            ledger.setNumberOfCoconuts(numCoconuts);
             coconutRepo.insert(ledger).subscribe(LOGGER::info);
         } else {
             CoconutLedger ledger = ledgers.get(0);
@@ -104,7 +107,7 @@ public class CoconutServiceImpl implements CoconutService {
     }
 
     @Override
-    public long getCoconutsRemaining(String user) {
+    public int getCoconutsRemaining(String user) {
         CoconutLedger ledger = coconutRepo.findByUsername(user).blockFirst();
         if (ledger != null && ledger.getCoconutsGiven() != null) {
             return dailyLimit - ledger.getCoconutsGiven();
@@ -122,4 +125,16 @@ public class CoconutServiceImpl implements CoconutService {
         coconutJournalRepo.save(journal).subscribe();
     }
 
+    @Override
+    public void subtractCoconutsGiven(String toUser, int numCoconuts) {
+        CoconutLedger ledger = coconutRepo.findByUsername(toUser).blockFirst();
+        if (ledger == null) {
+            ledger = initializeLedger(toUser);
+            ledger.setCoconutsGiven(-numCoconuts);
+            coconutRepo.insert(ledger).subscribe(LOGGER::info);
+        } else {
+            ledger.setCoconutsGiven(ledger.getCoconutsGiven() - numCoconuts);
+            coconutRepo.save(ledger).subscribe();
+        }
+    }
 }

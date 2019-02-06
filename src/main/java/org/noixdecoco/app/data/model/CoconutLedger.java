@@ -14,9 +14,9 @@ public class CoconutLedger {
 	
 	private String username; // Owner of this ledger
 	
-	private Long numberOfCoconuts; // Number of coconuts received total
+	private Integer numberOfCoconuts; // Number of coconuts received total
 	
-	private Long coconutsGiven;
+	private Integer coconutsGiven;
 	
 	private LocalDateTime lastCoconutGivenAt;
 	
@@ -36,11 +36,11 @@ public class CoconutLedger {
 		this.username = username;
 	}
 
-	public Long getNumberOfCoconuts() {
+	public Integer getNumberOfCoconuts() {
 		return numberOfCoconuts;
 	}
 
-	public void setNumberOfCoconuts(Long numberOfCoconuts) {
+	public void setNumberOfCoconuts(Integer numberOfCoconuts) {
 		this.numberOfCoconuts = numberOfCoconuts;
 	}
 	
@@ -48,11 +48,11 @@ public class CoconutLedger {
 		return "CoconutLedger: [username=" + username + ", coconuts=" + numberOfCoconuts + "]";
 	}
 	
-	public Long getCoconutsGiven() {
+	public Integer getCoconutsGiven() {
 		return coconutsGiven;
 	}
 
-	public void setCoconutsGiven(Long coconutsGiven) {
+	public void setCoconutsGiven(Integer coconutsGiven) {
 		this.coconutsGiven = coconutsGiven;
 	}
 
@@ -67,9 +67,8 @@ public class CoconutLedger {
 	public static CoconutLedger createNew() {
 		CoconutLedger ledger = new CoconutLedger();
 		ledger.setId(new ObjectId());
-		ledger.setCoconutsGiven(0l);
-		ledger.setNumberOfCoconuts(0l);
-		
+		ledger.setCoconutsGiven(0);
+		ledger.setNumberOfCoconuts(0);
 		return ledger;
 	}
 

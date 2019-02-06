@@ -9,7 +9,9 @@ public interface CoconutService {
 
     void addCoconut(String toUser, int numCoconuts);
 
+    void subtractCoconutsGiven(String toUser, int numCoconuts);
+
     Flux<CoconutLedger> getAllLedgers();
 
-    long getCoconutsRemaining(String user);
+    int getCoconutsRemaining(String user);
 }
