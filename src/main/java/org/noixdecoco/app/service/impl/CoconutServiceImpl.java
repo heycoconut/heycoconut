@@ -81,6 +81,11 @@ public class CoconutServiceImpl implements CoconutService {
     }
 
     @Override
+    public Flux<CoconutJournal> getAllJournals() {
+        return coconutJournalRepo.findAll();
+    }
+
+    @Override
     public int getCoconutsRemaining(String user) {
         CoconutLedger ledger = getLedger(user);
         if (ledger != null && ledger.getCoconutsGiven() != null) {
