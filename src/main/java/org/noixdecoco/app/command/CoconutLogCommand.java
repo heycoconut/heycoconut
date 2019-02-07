@@ -75,6 +75,7 @@ public class CoconutLogCommand extends CoconutCommand {
         Flux<CoconutJournal> transactions = coconutService.getAllJournals();
         List<CoconutJournal> journals = transactions.skip(offset).buffer(total).blockFirst();
         StringBuilder logs = new StringBuilder();
+        logs.append("*Stats: Total:" + total + ", Offset: " + offset + "*");
         for (CoconutJournal journal : journals) {
             logs.append("`Giver: <@" + journal.getUsername() + ">, receiver: <@" + journal.getRecipient() + ">, numCoconuts: "
                     + journal.getCoconutsGiven() + " channel: <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
