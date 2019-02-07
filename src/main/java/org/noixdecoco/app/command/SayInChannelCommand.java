@@ -57,7 +57,7 @@ public class SayInChannelCommand extends CoconutCommand {
 
     private static String extractChannel(String message) {
         String[] splitMessage = message.split(CHANNEL_TAG_START);
-        return splitMessage[1].substring(0, splitMessage[1].indexOf('>'));
+        return splitMessage[1].substring(0, splitMessage[1].indexOf('|'));
     }
 
     @Override
