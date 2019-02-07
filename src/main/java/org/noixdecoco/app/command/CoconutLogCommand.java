@@ -75,9 +75,9 @@ public class CoconutLogCommand extends CoconutCommand {
         Flux<CoconutJournal> transactions = coconutService.getAllJournals();
         List<CoconutJournal> journals = transactions.skip(offset).buffer(total).blockFirst();
         StringBuilder logs = new StringBuilder();
-        logs.append("*Stats: Total:" + total + ", Offset: " + offset + "*");
+        logs.append("*Stats* \n Total:" + total + ", Offset: " + offset + "* \n");
         for (CoconutJournal journal : journals) {
-            logs.append("`Giver: <@" + journal.getUsername() + ">, receiver: <@" + journal.getRecipient() + ">, numCoconuts: "
+            logs.append("Giver: <@" + journal.getUsername() + ">, receiver: <@" + journal.getRecipient() + ">, numCoconuts: "
                     + journal.getCoconutsGiven() + " channel: <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
         }
         slackService.sendMessage(channel, logs.toString());
