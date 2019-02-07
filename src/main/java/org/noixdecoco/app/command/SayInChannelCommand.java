@@ -52,7 +52,7 @@ public class SayInChannelCommand extends CoconutCommand {
 
     private static String extractMessage(String message) {
         message = message.replaceAll("sudo say","").trim();
-        return message.replaceAll("<#(\\S)*>","").trim();
+        return message.replaceAll("<#(\\S)*(>|\\|)","").trim();
     }
 
     private static String extractChannel(String message) {
