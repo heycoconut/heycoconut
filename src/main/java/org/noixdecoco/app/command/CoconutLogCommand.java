@@ -35,7 +35,7 @@ public class CoconutLogCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.toLowerCase().contains("sudo log ")) {
+                if (text.toLowerCase().contains("sudo log")) {
                     return true;
                 }
             }
@@ -75,11 +75,13 @@ public class CoconutLogCommand extends CoconutCommand {
         Flux<CoconutJournal> transactions = coconutService.getAllJournals();
         List<CoconutJournal> journals = transactions.skip(offset).buffer(total).blockFirst();
         StringBuilder logs = new StringBuilder();
-        logs.append("*Stats* \n Total:" + total + ", Offset: " + offset + "* \n");
+        logs.append(".                             :scroll: *Logs* :scroll: \n _Total_:" + total + ", _Offset_: " + offset + " \n");
+        logs.append("| *Giver*  |  *Receiver*  |  *Coconuts*  |  *Channel* \n");
         for (CoconutJournal journal : journals) {
-            logs.append("Giver: <@" + journal.getUsername() + ">, receiver: <@" + journal.getRecipient() + ">, numCoconuts: "
-                    + journal.getCoconutsGiven() + " channel: <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
+            logs.append("<@" + journal.getUsername() + ">  |  <@" + journal.getRecipient() + ">  |  " + journal.getCoconutsGiven()
+                    + "  |  <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
         }
         slackService.sendMessage(channel, logs.toString());
     }
+
 }
