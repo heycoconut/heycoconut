@@ -76,10 +76,10 @@ public class CoconutLogCommand extends CoconutCommand {
         List<CoconutJournal> journals = transactions.skip(offset).buffer(total).blockFirst();
         StringBuilder logs = new StringBuilder();
         logs.append(" :scroll: *Logs* :scroll: \n _Total_:" + total + ", _Offset_: " + offset + " \n");
-        logs.append("| *Giver*  |  *Receiver*  |  *Coconuts*  |  *Channel* \n");
+        logs.append("| *Giver*  -->  *Receiver*  |  *Channel* \n");
         for (CoconutJournal journal : journals) {
-            logs.append("-------------------------------------------------\n <@" + journal.getUsername() + ">  |  <@" + journal.getRecipient() + ">  |  " + journal.getCoconutsGiven()
-                    + "  |  <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
+            logs.append("-------------------------------------------------\n <@" + journal.getUsername() + ">  --*"+ journal.getCoconutsGiven()+"*:coconut:->  <@" + journal.getRecipient() + ">  |  "
+                    + "<#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
         }
         slackService.sendMessage(channel, logs.toString());
     }
