@@ -79,7 +79,7 @@ public class CoconutLogCommand extends CoconutCommand {
         logs.append("| *Giver*  |  *Receiver*  |  *Coconuts*  |  *Channel* \n");
         for (CoconutJournal journal : journals) {
             logs.append("-------------------------------------------------\n <@" + journal.getUsername() + ">  |  <@" + journal.getRecipient() + ">  |  " + journal.getCoconutsGiven()
-                    + "  |  <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n -------------------------------------------------\n");
+                    + "  |  <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n");
         }
         slackService.sendMessage(channel, logs.toString());
     }
