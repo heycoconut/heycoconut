@@ -12,6 +12,7 @@ import org.noixdecoco.app.exception.InvalidReceiverException;
 import org.noixdecoco.app.service.CoconutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
@@ -78,6 +79,11 @@ public class CoconutServiceImpl implements CoconutService {
     @Override
     public Flux<CoconutLedger> getAllLedgers() {
         return coconutRepo.findAll();
+    }
+
+    @Override
+    public Flux<CoconutJournal> getAllJournals() {
+        return coconutJournalRepo.findAll(Sort.by(Sort.Order.desc("coconutGivenAt")));
     }
 
     @Override
