@@ -1,5 +1,6 @@
 package org.noixdecoco.app.service;
 
+import org.noixdecoco.app.data.model.CoconutJournal;
 import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.exception.CoconutException;
 import reactor.core.publisher.Flux;
@@ -12,6 +13,8 @@ public interface CoconutService {
     void subtractCoconutsGiven(String toUser, int numCoconuts);
 
     Flux<CoconutLedger> getAllLedgers();
+
+    Flux<CoconutJournal> getAllJournals();
 
     int getCoconutsRemaining(String user);
 }
