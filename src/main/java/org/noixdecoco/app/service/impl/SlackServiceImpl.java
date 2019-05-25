@@ -69,6 +69,16 @@ public class SlackServiceImpl implements SlackService {
     }
 
     @Override
+    public GroupDTO getGroupInfo(String groupId) {
+        HttpEntity entity = new HttpEntity(createHttpHeaders());
+        Map<String, String> param = new HashMap<>();
+        param.put("channel", groupId);
+        ResponseEntity<GroupDTO> response = restTemplate.exchange(
+                SLACK_API_URL + SlackAction.GROUP_INFO, HttpMethod.GET, entity, GroupDTO.class, param);
+        return response.getBody();
+    }
+
+    @Override
     public String getBotUserId() {
         if (botUserId == null) {
             ResponseEntity<AuthInfoDTO> authInfoResponse = restTemplate.exchange(SLACK_API_URL + SlackAction.AUTH_INFO, HttpMethod.GET, new HttpEntity(createHttpHeaders()), AuthInfoDTO.class);
