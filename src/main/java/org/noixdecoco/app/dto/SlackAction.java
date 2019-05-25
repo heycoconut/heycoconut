@@ -6,6 +6,7 @@ public enum SlackAction {
     POST_EPHEMERAL("chat.postEphemeral"),
     ADD_REACTION("reactions.add"),
     CHANNEL_INFO("channels.info"),
+    GROUP_INFO("groups.info"),
     BOT_INFO("bot.info"),
     LIST_CHANNELS("conversations.list"),
     AUTH_INFO("auth.info");

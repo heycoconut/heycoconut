@@ -78,8 +78,16 @@ public class CoconutLogCommand extends CoconutCommand {
         logs.append(" :scroll: *Logs* :scroll: \n _Total_:" + total + ", _Offset_: " + offset + " \n");
         logs.append("| *Giver*  |  *Receiver*  |  *Coconuts*  |  *Channel* \n");
         for (CoconutJournal journal : journals) {
+            String channelName;
+            if (journal.getChannel().startsWith("G")) {
+                // Is actually a private group, get real name
+                channelName = "#" + slackService.getGroupInfo(journal.getChannel()).getName();
+            } else {
+                channelName = "<#" + journal.getChannel() + ">";
+            }
+
             logs.append("<@" + journal.getUsername() + ">  |  <@" + journal.getRecipient() + ">  |  " + journal.getCoconutsGiven()
-                    + "  |  <#" + journal.getChannel() + "> (" + journal.getChannel() + ")\n----------------------------------------------------------");
+                    + "  | " + channelName + " (" + journal.getChannel() + ")\n----------------------------------------------------------\n");
         }
         slackService.sendMessage(channel, logs.toString());
     }

@@ -100,7 +100,7 @@ public class GiveCoconutCommand extends CoconutCommand {
                     responseMessage.append(giver).append(" gave ").append(coconutCount)
                             .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
-                    message = message.replaceAll(":" + emoji + ":", ""); //Remove emojis from message
+                    message = message.replaceAll(":" + emoji + ":", "").trim(); //Remove emojis from message
                     slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. \n`"
                             + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emojiPlural +".");
                     slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
