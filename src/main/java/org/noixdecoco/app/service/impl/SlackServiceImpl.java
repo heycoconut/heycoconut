@@ -70,11 +70,13 @@ public class SlackServiceImpl implements SlackService {
 
     @Override
     public GroupDTO getGroupInfo(String groupId) {
+        LOGGER.info("Getting group: " + groupId);
         HttpEntity entity = new HttpEntity(createHttpHeaders());
         Map<String, String> param = new HashMap<>();
         param.put("channel", groupId);
         ResponseEntity<GroupDTO> response = restTemplate.exchange(
                 SLACK_API_URL + SlackAction.GROUP_INFO, HttpMethod.GET, entity, GroupDTO.class, param);
+        LOGGER.info("Response:" + response.getBody() + ", id:" + response.getBody().getId() + " " + response.getBody().getMembers().size() + " members, name:" + response.getBody().getName() );
         return response.getBody();
     }
 
