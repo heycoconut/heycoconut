@@ -29,7 +29,7 @@ public class ForceGiveCoconutCommand extends CoconutCommand {
         return request -> {
             if (request.getEvent().getText() != null) {
                 String text = request.getEvent().getText();
-                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains(" gift")) {
+                if (text.contains(GlobalConfig.COCONUT_EMOJI) && text.contains(TAG_START) && text.toLowerCase().contains("sudo ") && !text.toLowerCase().contains(" gift") && !text.toLowerCase().contains("sudo say")) {
                     return true;
                 }
             }
