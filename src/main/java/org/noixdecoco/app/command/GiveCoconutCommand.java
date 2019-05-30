@@ -109,7 +109,7 @@ public class GiveCoconutCommand extends CoconutCommand {
                     coconutsRemaining = coconutService.getCoconutsRemaining(userId);
 
                     // Message giver
-                    slackService.sendMessage(userId, "You have given " + name + " " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. Reason:\n`"
+                    slackService.sendMessage(userId, "You have given <@" + name + "> " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. Reason:\n`"
                             + message + "`\n You have *" + coconutsRemaining + "* "+ emojiPlural +" left to give today.");
                     slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
                 } catch (InsufficientCoconutsException e) {
