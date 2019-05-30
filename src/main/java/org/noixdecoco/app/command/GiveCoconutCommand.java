@@ -101,8 +101,16 @@ public class GiveCoconutCommand extends CoconutCommand {
                             .append(" " + emoji).append((coconutCount > 1 ? "s" : "")).append(" to <@").append(name).append(">. ");
 
                     message = message.replaceAll(":" + emoji + ":", "").trim(); //Remove emojis from message
+
+                    // Message receiver
                     slackService.sendMessage(name, giver + " has given you " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. \n`"
                             + message + "`\n You now have *" + (numCoconuts > 0 ? numCoconuts : "no") + "* "+ emojiPlural +".");
+
+                    coconutsRemaining = coconutService.getCoconutsRemaining(userId);
+
+                    // Message giver
+                    slackService.sendMessage(giver, "You have given " + name + " " + coconutCount + " " + emojiPlural + " In <#" + channel + ">. Reason:\n`"
+                            + message + "`\n You have *" + coconutsRemaining + "* "+ emojiPlural +" left to give today.");
                     slackService.addReaction(this.channel, this.timestamp, "heavy_check_mark");
                 } catch (InsufficientCoconutsException e) {
                     responseMessage.append(giver + " didn't have enough "+ emoji +"s remaining for <@" + name + "> :sob:");
@@ -120,7 +128,7 @@ public class GiveCoconutCommand extends CoconutCommand {
                 slackService.sendMessage(channel, responseMessage.toString());
             }
             coconutsRemaining = coconutService.getCoconutsRemaining(userId);
-            slackService.sendMessage(channel, "You have *" + (coconutsRemaining > 0 ? coconutsRemaining : "no") + "* " + emoji + " left to give today.", true, userId);
+            slackService.sendMessage(channel, "You have *" + coconutsRemaining + "* " + emoji + " left to give today.", true, userId);
         }
     }
 }
