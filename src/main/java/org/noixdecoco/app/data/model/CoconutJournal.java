@@ -2,6 +2,8 @@ package org.noixdecoco.app.data.model;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.LocalDateTime;
@@ -11,12 +13,15 @@ public class CoconutJournal {
     @Id
     private ObjectId id;
 
+
     private String username;
 
+    @Indexed(name="recipient_index")
     private String recipient;
 
     private Long coconutsGiven;
 
+    @Indexed(name="give_date_index", direction = IndexDirection.ASCENDING)
     private LocalDateTime coconutGivenAt;
 
     private String channel;
@@ -79,5 +84,9 @@ public class CoconutJournal {
         journal.setCoconutsGiven(0l);
 
         return journal;
+    }
+
+    public synchronized void addCoconutsGiven(long num) {
+        coconutsGiven += num;
     }
 }

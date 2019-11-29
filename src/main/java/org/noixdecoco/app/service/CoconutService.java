@@ -16,5 +16,7 @@ public interface CoconutService {
 
     Flux<CoconutJournal> getAllJournals();
 
+    Flux<CoconutJournal> getAllJournalsOlderThanByRecipient(String userId, int days);
+
     int getCoconutsRemaining(String user);
 }

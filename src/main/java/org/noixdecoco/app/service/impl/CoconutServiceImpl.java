@@ -13,12 +13,16 @@ import org.noixdecoco.app.service.CoconutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.aggregation.DateOperators;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class CoconutServiceImpl implements CoconutService {
@@ -79,6 +83,14 @@ public class CoconutServiceImpl implements CoconutService {
     @Override
     public Flux<CoconutLedger> getAllLedgers() {
         return coconutRepo.findAll();
+    }
+
+    @Override
+    public Flux<CoconutJournal> getAllJournalsOlderThanByRecipient(String userId, int days) {
+        // Return all ledgers old than the specified number of days
+        return coconutJournalRepo.findByRecipient(userId, Sort.by(Sort.Order.asc("coconutGivenAt"))).filter(journal ->
+            LocalDateTime.now().minus(days, ChronoUnit.DAYS).isAfter(journal.getCoconutGivenAt())
+        );
     }
 
     @Override
