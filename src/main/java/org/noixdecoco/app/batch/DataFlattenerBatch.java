@@ -8,8 +8,6 @@ import org.noixdecoco.app.data.repository.CoconutJournalRepository;
 import org.noixdecoco.app.service.CoconutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 import org.springframework.util.StopWatch;
 import reactor.core.publisher.Flux;
 
@@ -45,7 +43,7 @@ public class DataFlattenerBatch {
                     error -> LOGGER.error("Failed to flatten journal for user: " + ledger.getUsername()),
                     () -> {
                         journalRepo.insert(flattenedJournal).block();
-                        journalRepo.deleteOlderThan(ledger.getUsername(), LocalDateTime.now().minus(ChronoUnit.)flattenDataOlderThan);
+                        journalRepo.deleteOlderThan(ledger.getUsername(), LocalDateTime.now().minus(flattenDataOlderThan, ChronoUnit.DAYS);
                         LOGGER.info("Successfully flattened journals for user: " + ledger.getUsername());
                     }
             );
