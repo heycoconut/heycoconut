@@ -8,41 +8,40 @@ import org.noixdecoco.app.dto.SlackRequestDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toMap;
 
 @Command(EventType.APP_MENTION)
-public class WeeklyCommand extends CoconutCommand {
+public class MonthlyCommand extends CoconutCommand {
 
     private String channel;
     private DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    private LocalDateTime start = LocalDateTime.now().minusWeeks(1);
+    private LocalDateTime start = LocalDateTime.now().minusMonths(1);
     private LocalDateTime end = LocalDateTime.now();
     private String startFormatted = start.format(formatter);
     private String endFormatted = end.format(formatter);
 
-    @Value("${top.weekly.limit}")
-    private long max;
-
     @Autowired
     protected CoconutJournalRepository journal;
 
-    public WeeklyCommand(String channel) {
+    public MonthlyCommand(String channel) {
         super(null);
         this.channel = channel;
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("weekly");
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("monthly");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new WeeklyCommand(request.getEvent().getChannel());
+        return new MonthlyCommand(request.getEvent().getChannel());
     }
 
     @Override
@@ -57,13 +56,13 @@ public class WeeklyCommand extends CoconutCommand {
         if (weekStats != null) {
             slackService.sendMessage(channel, composeStats(weekStats));
         } else {
-            slackService.sendMessage(channel, "No weekly summary from " + startFormatted + " to " + endFormatted);
+            slackService.sendMessage(channel, "No monthly summary from " + startFormatted + " to " + endFormatted);
         }
     }
 
     private String composeStats(List<CoconutJournal> journals) {
         StringBuilder builder = new StringBuilder();
-        builder.append("*Weekly Summary*:chart_with_upwards_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
+        builder.append("*Monthly Summary*:chart_with_upwards_trend:\n" + startFormatted + " to " + endFormatted + "\n\n");
 
         Map<String, Long> givers = new HashMap<>();
         Map<String, Long> recipients = new HashMap<>();
@@ -89,10 +88,10 @@ public class WeeklyCommand extends CoconutCommand {
             }
         }
 
-        builder.append("*Top " + max + " Givers* :heart:\n\n");
+        builder.append("*Top 10 Givers* :heart:\n\n");
         builder = generateTop(builder,givers);
 
-        builder.append("\n*Top " + max + " Recipients* :trophy:\n\n");
+        builder.append("\n*Top 10 Recipients* :trophy:\n\n");
         builder = generateTop(builder,recipients);
 
         return builder.toString();
@@ -110,7 +109,7 @@ public class WeeklyCommand extends CoconutCommand {
         int count = 1;
         for (Map.Entry<String, Long> user : sortValDesc(userMap).entrySet()) {
             builder.append(count++).append(". <@").append(user.getKey()).append(">: ").append(user.getValue()).append("\n");
-            if (count > max) break;
+            if (count > 10) break;
         }
         return builder;
     }
