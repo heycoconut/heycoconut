@@ -17,6 +17,4 @@ public interface CoconutJournalRepository extends ReactiveMongoRepository<Coconu
     Flux<CoconutJournal> findByCoconutGivenAtBetween(LocalDateTime start, LocalDateTime end);
     Flux<CoconutJournal> findByChannel(String channel);
 
-    //@DeleteQuery(value = "{'username' : $0, 'coconutGivenAt': { $lte : $1} }")
-    boolean deleteOlderThan(String username, LocalDateTime date);
 }

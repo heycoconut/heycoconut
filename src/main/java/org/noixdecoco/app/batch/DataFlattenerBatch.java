@@ -43,7 +43,7 @@ public class DataFlattenerBatch {
                     error -> LOGGER.error("Failed to flatten journal for user: " + ledger.getUsername()),
                     () -> {
                         journalRepo.insert(flattenedJournal).block();
-                        journalRepo.deleteOlderThan(ledger.getUsername(), LocalDateTime.now().minus(flattenDataOlderThan, ChronoUnit.DAYS));
+                        //journalRepo.deleteOlderThan(ledger.getUsername(), LocalDateTime.now().minus(flattenDataOlderThan, ChronoUnit.DAYS));
                         LOGGER.info("Successfully flattened journals for user: " + ledger.getUsername());
                     }
             );
