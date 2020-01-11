@@ -1,5 +1,6 @@
 package org.noixdecoco.app.command;
 
+import java.time.LocalDateTime;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -43,6 +44,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         Flux<CoconutJournal> journals = journalRepo.findByChannel(channel);
+        journals = journals.filter(j -> j.getCoconutGivenAt().getDayOfYear() == LocalDateTime.now().getYear());
         Map<String, Long> rankings = new HashMap<>();
         LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + journals.count().block());
         // Not very efficient in the long run. Will need to "flatten" data eventually
