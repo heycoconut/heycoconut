@@ -44,21 +44,25 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         Flux<CoconutJournal> journals = journalRepo.findByChannel(channel);
-        journals = journals.filter(j -> j.getCoconutGivenAt().getDayOfYear() == LocalDateTime.now().getYear());
+        journals = journals.filter(j -> j.getCoconutGivenAt().getYear() == LocalDateTime.now().getYear());
         Map<String, Long> rankings = new HashMap<>();
-        LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + journals.count().block());
-        // Not very efficient in the long run. Will need to "flatten" data eventually
-        for (CoconutJournal journal : journals.buffer().blockFirst()) {
-            LOGGER.info("Calculating...");
-            rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
-            rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
-        }
-        final Map<String, Long> sorted = rankings.entrySet().stream()
-            .sorted(Map.Entry.comparingByValue((x1,x2)-> Long.compare(x2,x1))).limit(10)
-            .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x,y) -> y, LinkedHashMap::new));
-        slackService.sendMessage(channel, composeLeaderboard(sorted));
-        LOGGER.info("Inside doOnComplete method. Collected " + sorted.size() + " entries");
+        long cocosFound = journals.count().block();
+        LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + cocosFound);
 
+        if (cocosFound > 0) {
+            // Not very efficient in the long run. Will need to "flatten" data eventually
+            for (CoconutJournal journal : journals.buffer().blockFirst()) {
+                LOGGER.info("Calculating...");
+                rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
+                rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
+            }
+            final Map<String, Long> sorted = rankings.entrySet().stream()
+                    .sorted(Map.Entry.comparingByValue((x1, x2) -> Long.compare(x2, x1))).limit(10)
+                    .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (x, y) -> y, LinkedHashMap::new));
+            slackService.sendMessage(channel, composeLeaderboard(sorted));
+        } else {
+            slackService.sendMessage(channel, composeNoDataFound());
+        }
     }
 
     private String composeLeaderboard(Map<String, Long> topCocos) {
@@ -68,6 +72,13 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
         topCocos.entrySet().stream().limit(10).forEach((entry) -> {
             builder.append(currentRank.getAndIncrement()).append(". <@").append(entry.getKey()).append(">: ").append(entry.getValue()).append("\n");
         });
+        return builder.toString();
+    }
+
+    private String composeNoDataFound() {
+        final StringBuilder builder = new StringBuilder();
+        builder.append("*Leaderboard* for <#").append(channel).append(">\n\n");
+        builder.append("*No data found for current year: " + LocalDateTime.now().getYear() + "*.");
         return builder.toString();
     }
 }
