@@ -1,10 +1,14 @@
 package org.noixdecoco.app.command;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.TextStyle;
+import java.time.temporal.WeekFields;
 import java.util.concurrent.atomic.AtomicInteger;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.noixdecoco.app.command.annotation.Command;
+import org.noixdecoco.app.data.TimePeriod;
 import org.noixdecoco.app.data.model.CoconutJournal;
 import org.noixdecoco.app.data.model.CoconutLedger;
 import org.noixdecoco.app.dto.EventType;
@@ -22,9 +26,11 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     private static final Logger LOGGER = LogManager.getLogger(CoconutChannelRankingsCommand.class);
 
     private String channel;
+    private TimePeriod period;
 
-    public CoconutChannelRankingsCommand(String userId, String channel) {
+    public CoconutChannelRankingsCommand(String userId, String channel, TimePeriod period) {
         super(userId);
+        this.period = period;
         this.channel = channel;
     }
 
@@ -33,7 +39,16 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
-        return new CoconutChannelRankingsCommand(request.getEvent().getUser(), request.getEvent().getChannel());
+        TimePeriod period = TimePeriod.MONTH;
+        if (request.getEvent().getText().contains("yearly")) {
+            period = TimePeriod.YEAR;
+        } else if (request.getEvent().getText().contains("weekly")) {
+            period = TimePeriod.WEEK;
+        } else if (request.getEvent().getText().contains("all") && request.getEvent().getText().contains("time")) {
+            period = TimePeriod.ALL_TIME;
+        }
+
+        return new CoconutChannelRankingsCommand(request.getEvent().getUser(), request.getEvent().getChannel(), period);
     }
 
     @Override
@@ -44,7 +59,20 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     @Override
     protected void performAction() {
         Flux<CoconutJournal> journals = journalRepo.findByChannel(channel);
-        journals = journals.filter(j -> j.getCoconutGivenAt().getYear() == LocalDateTime.now().getYear());
+        if (period != TimePeriod.ALL_TIME) {
+            // Yearly leaderboard
+            journals = journals.filter(j -> j.getCoconutGivenAt().getYear() == LocalDateTime.now().getYear());
+            if (period != TimePeriod.YEAR) {
+                // Monthly Leaderboard
+                journals = journals.filter(j -> j.getCoconutGivenAt().getMonth() == LocalDateTime.now().getMonth());
+                if (period != TimePeriod.MONTH) {
+                    // Weekly leaderboard
+                    final WeekFields weekField = WeekFields.of(Locale.getDefault());
+                    journals = journals.filter(j -> j.getCoconutGivenAt().get(weekField.weekOfWeekBasedYear()) == LocalDateTime.now().get(weekField.weekOfWeekBasedYear()));
+                }
+            }
+        }
+
         Map<String, Long> rankings = new HashMap<>();
         long cocosFound = journals.count().block();
         LOGGER.info("Executing action CoconutChannelRankingsCommand. Found " + cocosFound);
@@ -67,11 +95,27 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
 
     private String composeLeaderboard(Map<String, Long> topCocos) {
         final StringBuilder builder = new StringBuilder();
-        builder.append("*Leaderboard* for <#").append(channel).append("> for " + LocalDateTime.now().getYear() + "\n\n");
+        String timePeriodDescription = "";
+        switch (period) {
+            case ALL_TIME:
+                timePeriodDescription = "all time";
+                break;
+            case YEAR:
+                timePeriodDescription = "the year " + LocalDateTime.now().getYear();
+                break;
+            case MONTH:
+                timePeriodDescription = "the month of " + LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA);
+                break;
+            case WEEK:
+                timePeriodDescription = "the week from " + LocalDateTime.now().getMonth().getDisplayName(TextStyle.FULL, Locale.CANADA) + " " + getFirstDayOfWeek(LocalDate.now()) + " to " + getLastDayOfWeek(LocalDate.now());
+                break;
+        }
+        builder.append("*Leaderboard* for <#").append(channel).append("> for " + timePeriodDescription + "\n\n");
         final AtomicInteger currentRank = new AtomicInteger(1);
         topCocos.entrySet().stream().limit(10).forEach((entry) -> {
             builder.append(currentRank.getAndIncrement()).append(". <@").append(entry.getKey()).append(">: ").append(entry.getValue()).append("\n");
         });
+        builder.append("_(note you can specify the time period for the leaderboard by specifying *yearly*, *monthly*, *weekly*, or *all time*)_");
         return builder.toString();
     }
 
@@ -80,5 +124,13 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
         builder.append("*Leaderboard* for <#").append(channel).append(">\n\n");
         builder.append("*No data found for current year: " + LocalDateTime.now().getYear() + "*.");
         return builder.toString();
+    }
+
+    private int getFirstDayOfWeek(LocalDate date) {
+        return date.with(WeekFields.of(Locale.US).getFirstDayOfWeek()).getDayOfMonth();
+    }
+
+    private int getLastDayOfWeek(LocalDate date) {
+        return date.with(WeekFields.of(Locale.US).dayOfWeek(), 7L).getDayOfMonth();
     }
 }

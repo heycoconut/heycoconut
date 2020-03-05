@@ -72,6 +72,7 @@ public class GiveExtraDailyCoconutCommand extends CoconutCommand {
         for (String name : receivers) {
             coconutService.subtractCoconutsGiven(name, coconutCount);
             responseMessage.append("<@").append(name).append("> has received ").append(coconutCount).append(" extra " + emoji).append((Math.abs(coconutCount) > 1 ? "s" : "")).append(" to gift for the day.");
+            slackService.sendMessage(name, "You have been given an extra " + coconutCount + " " + emoji + "(s) to give away for the day.");
         }
         slackService.sendMessage(channel, responseMessage.toString());
     }

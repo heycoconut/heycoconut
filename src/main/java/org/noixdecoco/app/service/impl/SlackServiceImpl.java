@@ -38,9 +38,15 @@ public class SlackServiceImpl implements SlackService {
 
     @Override
     public void sendMessage(String channel, String text, boolean ephemeral, String toUser) {
+        sendMessageThread(channel, text, ephemeral, toUser, null);
+    }
+
+    @Override
+    public void sendMessageThread(String channel, String text, boolean ephemeral, String toUser, String threadTs) {
         MessageDTO message = new MessageDTO();
         message.setChannel(channel);
         message.setText(text);
+        message.setThreadTs(threadTs);
         if (ephemeral) {
             message.setUser(toUser);
         }

@@ -11,6 +11,8 @@ public interface SlackService {
 
     void sendMessage(String channel, String text, boolean ephemeral, String toUser);
 
+    void sendMessageThread(String channel, String text, boolean ephemeral, String toUser, String threadTs);
+
     void addReaction(String channel, String timestamp, String emoji);
 
     ChannelDTO getChannelInfo(String channelId);

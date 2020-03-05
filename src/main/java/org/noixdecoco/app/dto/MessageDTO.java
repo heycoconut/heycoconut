@@ -10,6 +10,9 @@ public class MessageDTO implements SlackDTO {
     private String channel;
     private String user;
 
+    @JsonProperty("thread_ts")
+    private String threadTs;
+
     @JsonProperty("as_user")
     private Boolean asUser = Boolean.TRUE;
 
@@ -43,5 +46,13 @@ public class MessageDTO implements SlackDTO {
 
     public void setUser(String user) {
         this.user = user;
+    }
+
+    public String getThreadTs() {
+        return threadTs;
+    }
+
+    public void setThreadTs(String threadTs) {
+        this.threadTs = threadTs;
     }
 }
