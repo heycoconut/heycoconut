@@ -36,7 +36,7 @@ public class YearlyCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("yearly");
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("yearly report");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {

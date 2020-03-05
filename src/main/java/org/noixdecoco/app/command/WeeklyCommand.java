@@ -38,7 +38,7 @@ public class WeeklyCommand extends CoconutCommand {
     }
 
     public static Predicate<SlackRequestDTO> getPredicate() {
-        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("weekly");
+        return r -> r.getEvent().getText() != null && r.getEvent().getText().contains("weekly report");
     }
 
     public static CoconutCommand build(SlackRequestDTO request) {
