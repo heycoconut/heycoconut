@@ -80,7 +80,6 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
         if (cocosFound > 0) {
             // Not very efficient in the long run. Will need to "flatten" data eventually
             for (CoconutJournal journal : journals.buffer().blockFirst()) {
-                LOGGER.info("Calculating...");
                 rankings.computeIfAbsent(journal.getRecipient(), (key) -> Long.valueOf(0));
                 rankings.put(journal.getRecipient(), rankings.get(journal.getRecipient()) + journal.getCoconutsGiven());
             }
@@ -127,7 +126,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     }
 
     private int getFirstDayOfWeek(LocalDate date) {
-        return date.with(WeekFields.of(Locale.US).getFirstDayOfWeek()).getDayOfMonth();
+        return date.with(WeekFields.of(Locale.US).dayOfWeek(), 1L).getDayOfMonth();
     }
 
     private int getLastDayOfWeek(LocalDate date) {
