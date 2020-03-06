@@ -123,10 +123,8 @@ public class GiveCoconutCommand extends CoconutCommand {
                     slackService.addReaction(this.channel, this.timestamp, "heavy_multiplication_x");
                 }
             }
-            if(timestamp == null) {
-                // Only send a message if coconut wasn't given verbally, so no timestamp on reaction added
-                slackService.sendMessageThread(channel, responseMessage.toString(), false, null, timestamp);
-            }
+            
+            slackService.sendMessageThread(channel, responseMessage.toString(), false, null, timestamp);
             coconutsRemaining = coconutService.getCoconutsRemaining(userId);
             slackService.sendMessage(channel, "You have *" + coconutsRemaining + "* " + emoji + " left to give today.", true, userId);
         }
