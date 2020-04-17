@@ -110,6 +110,7 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
                 break;
         }
         builder.append("*Leaderboard* for <#").append(channel).append("> for " + timePeriodDescription + "\n\n");
+
         final AtomicInteger currentRank = new AtomicInteger(1);
         topCocos.entrySet().stream().limit(10).forEach((entry) -> {
             builder.append(currentRank.getAndIncrement()).append(". <@").append(entry.getKey()).append(">: ").append(entry.getValue()).append("\n");
@@ -132,4 +133,5 @@ public class CoconutChannelRankingsCommand extends CoconutCommand {
     private int getLastDayOfWeek(LocalDate date) {
         return date.with(WeekFields.of(Locale.US).dayOfWeek(), 7L).getDayOfMonth();
     }
+
 }
