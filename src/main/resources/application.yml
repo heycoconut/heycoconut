@@ -15,11 +15,7 @@ management:
 admin.users: ${ADMIN_USERS}
 banned.users: ${BANNED_USERS:USLACKBOT}
 spring.data.mongodb:
-  host: ${MONGO_HOST}
-  port: ${MONGO_PORT}
-  database: ${MONGO_DB}
-  username: ${MONGO_USER}
-  password: ${MONGO_PW}
+  uri: ${MONGO_URI}
 server.error.whitelabel.enabled: false
 server.port: ${PORT}
 bot:
