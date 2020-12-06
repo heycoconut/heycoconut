@@ -34,8 +34,7 @@ public class CoconutRankingsCommand extends CoconutCommand {
 
     @Override
     protected void performAction() {
-        Sort sort = new Sort(Sort.Direction.DESC, "numberOfCoconuts");
-        List<CoconutLedger> topTen = ledgerRepo.findAll(sort).buffer(10).blockFirst();
+        List<CoconutLedger> topTen = ledgerRepo.findAll(Sort.by(Sort.Direction.DESC, "numberOfCoconuts")).buffer(10).blockFirst();
 
         slackService.sendMessage(channel, composeLeaderboard(topTen));
     }
